@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Headset, MessageCircle, ShieldCheck, Shirt, Truck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Shirt, Truck } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getStoreSettings } from "@/lib/store";
-import { getWhatsAppUrl } from "@/lib/utils";
 import { ProductCard } from "@/components/storefront/product-card";
 import { HomeFaq } from "@/components/storefront/home-faq";
 import { buildOrganizationJsonLd } from "@/lib/seo";
@@ -55,10 +54,6 @@ export default async function HomePage() {
     orderBy: { createdAt: "desc" },
     take: 4,
   });
-  const stylistUrl = getWhatsAppUrl(
-    settings.whatsappNumber,
-    "Hi RR Vastras, I'd like styling advice on a saree."
-  );
   const orgJsonLd = buildOrganizationJsonLd();
 
   return (
@@ -336,30 +331,6 @@ export default async function HomePage() {
               </p>
             </div>
             <HomeFaq />
-            <div className="mt-space-2xl flex flex-col items-center justify-between gap-space-md rounded bg-surface-container-high p-space-lg text-center sm:flex-row sm:text-left">
-              <div className="flex items-center gap-space-md">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-tertiary-fixed">
-                  <Headset className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="font-headline-sm text-headline-sm text-primary">
-                    Need personalized styling advice?
-                  </h4>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">
-                    Our draping advisors are ready to assist with fabric choices &amp; occasions.
-                  </p>
-                </div>
-              </div>
-              <Link
-                href={stylistUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center gap-space-xs rounded bg-primary-container px-space-md py-space-xs font-label-button text-label-button tracking-wider text-surface-container-lowest uppercase transition-colors hover:bg-primary"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>Ask a Stylist</span>
-              </Link>
-            </div>
           </div>
         </section>
       </div>

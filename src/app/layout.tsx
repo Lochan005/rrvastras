@@ -5,6 +5,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { ToastProvider } from "@/components/ui/toaster";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { getSiteUrl } from "@/lib/utils";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -28,9 +29,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "RR Vastras | Women's Sarees",
     template: "%s | RR Vastras",

@@ -10,7 +10,6 @@ import {
   Lock,
   Mail,
   MapPin,
-  MessageCircle,
   Package,
   Phone,
   ShieldCheck,
@@ -20,14 +19,12 @@ import {
 } from "lucide-react";
 import { requireAuth } from "@/lib/session";
 import { prisma } from "@/lib/db";
-import { formatINR, getWhatsAppUrl, cn } from "@/lib/utils";
-import { getStoreSettings } from "@/lib/store";
+import { formatINR, cn } from "@/lib/utils";
 import { SignOutButton } from "@/components/account/sign-out-button";
 import { ORDER_STATUS_COPY, formatOrderDate } from "@/lib/order-status";
 
 export default async function AccountPage() {
   const session = await requireAuth();
-  const settings = await getStoreSettings();
   const userId = session.user.id;
 
   const [user, orders, orderCount, wishlistCount, addressCount] =
@@ -67,10 +64,6 @@ export default async function AccountPage() {
         year: "numeric",
       })
     : null;
-  const stylistUrl = getWhatsAppUrl(
-    settings.whatsappNumber,
-    "Hi RR Vastras, I'd like styling advice."
-  );
 
   return (
     <div className="mx-auto w-full max-w-[1360px] px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
@@ -507,28 +500,7 @@ export default async function AccountPage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-space-sm">
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-container text-secondary">
-                  <MessageCircle className="h-[18px] w-[18px]" />
-                </div>
-                <div>
-                  <h4 className="font-headline-sm text-[15px] leading-tight text-on-surface">
-                    Personal Draping Concierge
-                  </h4>
-                  <p className="pt-0.5 font-body-sm text-body-sm text-on-surface-variant">
-                    WhatsApp support for fabric choices, occasions, and order help.
-                  </p>
-                </div>
-              </div>
             </div>
-            <Link
-              href={stylistUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded bg-surface-container-high py-2.5 font-label-button text-label-button text-primary transition-colors hover:bg-surface-variant"
-            >
-              Connect Styling Concierge
-            </Link>
           </div>
 
           <div className="space-y-space-md rounded-xl bg-surface-container-low p-space-xl shadow-sm">

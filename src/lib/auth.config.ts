@@ -18,6 +18,7 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
+  trustHost: true,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
