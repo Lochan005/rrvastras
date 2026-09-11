@@ -1,17 +1,22 @@
 import Link from "next/link";
 import { Camera, Share2 } from "lucide-react";
 import { BrandMark } from "./brand-mark";
+import { getStoreSettings } from "@/lib/store";
+import { getWhatsAppUrl } from "@/lib/utils";
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getStoreSettings();
+  const whatsappUrl = getWhatsAppUrl(
+    settings.whatsappNumber,
+    "Hi RR Vastras, I have a question."
+  );
+
   return (
     <footer className="w-full border-t border-tertiary-fixed-dim/40 bg-primary text-surface-container-lowest">
       <div className="mx-auto max-w-[1360px] px-gutter-mobile py-space-3xl lg:px-gutter-desktop">
         <div className="grid grid-cols-1 gap-space-2xl md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-space-md">
-            <BrandMark compact inverted />
-            <p className="font-label-eyebrow uppercase tracking-[0.14em] text-tertiary-fixed">
-              Shop Your Vibe
-            </p>
+            <BrandMark compact />
             <p className="font-body-sm text-body-sm leading-relaxed text-surface-variant/80">
               Curated women&apos;s sarees in pure silk, fine cotton, and heritage
               handloom weaves across India.
@@ -89,8 +94,24 @@ export function Footer() {
           <div className="space-y-space-md">
             <h3 className="font-headline-sm text-headline-sm text-tertiary-fixed">Contact</h3>
             <ul className="space-y-space-xs font-body-sm text-body-sm text-surface-variant/80">
-              <li>support@rrvastras.com</li>
-              <li>+91 98765 43210</li>
+              <li>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-tertiary-fixed"
+                >
+                  WhatsApp
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+919902349888"
+                  className="transition-colors hover:text-tertiary-fixed"
+                >
+                  +91 9902349888
+                </a>
+              </li>
               <li>Mon–Sat, 9:00 AM–6:00 PM IST</li>
             </ul>
           </div>

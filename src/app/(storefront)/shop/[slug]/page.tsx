@@ -152,7 +152,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <ul className="space-y-3 text-sm text-muted">
                 <li className="flex gap-3">
                   <span className="text-gold">✦</span>
-                  Free shipping on orders above ₹7,500
+                  Free shipping on orders above ₹5,000
                 </li>
                 <li className="flex gap-3">
                   <span className="text-gold">✦</span>

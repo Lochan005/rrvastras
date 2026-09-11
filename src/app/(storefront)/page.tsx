@@ -7,8 +7,8 @@ import { ProductCard } from "@/components/storefront/product-card";
 import { HomeFaq } from "@/components/storefront/home-faq";
 import { buildOrganizationJsonLd } from "@/lib/seo";
 
-const HERO_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuAPvFvnsrLCcTzcMY0lBxjEbwstPmdtuUib8Lx9fAkT5lJPrOGADSubywFNAPQN5RZJJ_d-ukgBzve90BVqzVSoS4qQv-zAKR0Nq9bOrQOoRN17oEs38o4QBF2-rtwpwjS8jMqI2XyCDl12usNn88JKnACd31wwROaJsp2AS3-wVOdoDo-Q3UP8M8VWIbL6gRPvukwe68ggZLtpRbE-wRklf8pkPY95dDoTXCzVQLioRSRi4KlpArQyPw";
+const HERO_IMAGE_MOBILE = "/hero-mobile.jpg";
+const HERO_IMAGE_DESKTOP = "/hero-desktop.jpg";
 
 const CATEGORIES = [
   {
@@ -16,27 +16,26 @@ const CATEGORIES = [
     subtitle: "Banarasi, Kanjivaram, Tussar",
     href: "/shop?fabric=silk",
     cta: "Explore Silk",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAj9vmRYVTxO54APrDp8FzRD_MGhorFc37qBMHsfge8uyb5-ptLRHNegSjnxDkkA5EpOaUf3aR6NdCxmxjvs93yK56R_FolyWj20yqXUB4h4dLU7AlbKN79ogOn7g7rqvTZNVBmosYOh6_XFYs8ZCjUhWK1zvFw2fJaGizPO_X_QdgfTwtlEUY5PNUXgtMoeQdCxAU5ZjOKiXyNct0tEO4_hw-v1Hw7GXYaIUtvAiZGZwtBGxbpVK0njA",
-    alt: "Luxurious silk saree with detailed zari work",
+    image: "/category-silk.jpg",
+    alt: "Woman wearing a maroon and gold silk Banarasi saree",
+    objectPosition: "center top",
   },
   {
     title: "Cotton Collections",
     subtitle: "Mulmul, Chanderi, Kota Doria",
     href: "/shop?fabric=cotton",
     cta: "Explore Cotton",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAQUhJv58QVA0F-iIAEy5fwtPOUMTE_ILBps90ws0ss8sDptc3cPaymUQwz2xvv_izlEcDbs_kn0rUilijXqnA8vKgLGQLOWoTauCGHQKPqf5rnpDV2EWzUcxk3_LlOWvsuEhbjpkJN-1X2NwXPwI7cE2oIZziFHc0jGTQ9vRa8MMQhLKVSAopUXkhqtj3Q3QXSJQjVK80ohlf_qPY6jqeE7KlL4542Il-sdfQ1DitQeZS9zQfyl0JGAw",
-    alt: "Handloom cotton saree with delicate woven floral motifs",
+    image: "/category-cotton.jpg",
+    alt: "Woman wearing a light pink floral cotton saree",
+    objectPosition: "center top",
   },
   {
     title: "Handloom Weaves",
     subtitle: "Ikat, Jamdani, Maheshwari",
     href: "/shop?fabric=handloom",
     cta: "Explore Handloom",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDQi1IjHBwCKr61bL_i0WoZWQ16VxY_fCJC10ih4veA1OhIjdVEUKHsahwpUB-q1Qhr5PM5mFdiEZtrEN51oWBWHvhZwvN3WJpiDSTmdSM_IBu_GYf2-ZmTB0MsqWLeqIWKkuMXUr_Wx_HMKQhgBXvbRTto5nETZ59LtaPOe7EIwB7wI-1dRk-BBJRYjgHFFmu5X90LWbN_trbx02xBkxZS5KFDP96Cprr_w_Rs-G0Zda6J_oXHAUAvYQ",
-    alt: "Artisanal handloom saree with Ikat geometric patterns",
+    image: "/category-handloom.jpg",
+    alt: "Red terracotta Ikat or Patola-style handloom saree draped on a wooden table with gold zari border",
   },
 ];
 
@@ -64,18 +63,21 @@ export default async function HomePage() {
       />
 
       <div className="flex w-full flex-col">
-        <section className="relative -mt-[92px] flex min-h-[600px] h-[82vh] w-full items-center justify-start overflow-hidden bg-primary pt-[92px] lg:-mt-[104px] lg:pt-[104px]">
-          <div
-            className="absolute inset-0 h-full w-full scale-105 bg-cover bg-center"
-            style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-            role="img"
-            aria-label="Editorial portrait of a woman draped in a crimson and gold silk saree"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent opacity-95" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-primary/30" />
-          <div className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-tertiary-fixed/5 blur-3xl" />
+        <section className="relative -mt-[92px] flex min-h-[100svh] w-full items-end overflow-hidden bg-[#3a010e] pt-[92px] lg:-mt-[104px] lg:h-[82vh] lg:min-h-[640px] lg:items-center lg:pt-[104px]">
+          <picture>
+            <source media="(min-width: 1024px)" srcSet={HERO_IMAGE_DESKTOP} />
+            <img
+              src={HERO_IMAGE_MOBILE}
+              alt="Woman in a maroon and gold Banarasi saree in a palace courtyard"
+              className="absolute inset-x-0 bottom-0 top-[92px] w-full object-cover object-[center_top] lg:top-[104px] lg:object-[center_15%]"
+            />
+          </picture>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#3a010e] from-[28%] via-[#3a010e]/50 to-[#3a010e]/15 lg:hidden" />
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-[#3a010e] via-[#3a010e]/80 to-transparent opacity-95 lg:block" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-[#3a010e] via-transparent to-[#3a010e]/30 lg:block" />
+          <div className="pointer-events-none absolute -right-24 -bottom-24 hidden h-96 w-96 rounded-full bg-tertiary-fixed/5 blur-3xl lg:block" />
 
-          <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col items-start justify-center px-gutter-mobile py-space-2xl lg:px-gutter-desktop">
+          <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col items-start justify-end px-gutter-mobile pb-space-2xl pt-space-lg lg:justify-center lg:px-gutter-desktop lg:py-space-2xl">
             <div className="mb-space-md inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest/10 px-space-sm py-1 shadow-sm backdrop-blur-md">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-tertiary-fixed" />
               <span className="font-label-eyebrow text-[10px] tracking-[0.2em] text-tertiary-fixed uppercase">
@@ -89,7 +91,7 @@ export default async function HomePage() {
               Shop Your Vibe
             </h1>
             <p className="mb-space-xl max-w-xl font-body-lg text-body-lg leading-relaxed font-light text-surface-variant/90">
-              Discover curated sarees in silk, cotton, and handloom weaves. Crafted for celebrations, everyday grace, and everything in between.
+              Sarees chosen with care — for celebrations, quiet days, and the life in between.
             </p>
             <div className="flex flex-wrap items-center gap-space-md">
               <Link
@@ -137,44 +139,44 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="relative z-20 w-full bg-primary-container py-space-lg text-surface-container-lowest shadow-md">
+        <section className="relative z-20 w-full bg-[#FFFFFF] py-space-lg shadow-sm">
           <div className="mx-auto max-w-[1360px] px-gutter-mobile lg:px-gutter-desktop">
             <div className="grid grid-cols-1 items-center gap-space-lg md:grid-cols-3 lg:gap-space-2xl">
-              <div className="flex items-center gap-space-md rounded bg-primary/20 p-space-sm backdrop-blur-sm">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-tertiary-fixed/15 text-tertiary-fixed">
+              <div className="flex items-center gap-space-md rounded-2xl bg-primary/10 p-space-sm">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[50%] bg-primary/10 text-primary">
                   <Truck className="h-[26px] w-[26px]" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-tertiary-fixed">
+                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-primary">
                     Free Shipping
                   </span>
-                  <span className="font-body-sm text-body-sm text-surface-variant/80">
-                    On orders above ₹7,500
+                  <span className="font-body-sm text-body-sm text-on-surface-variant">
+                    On orders above ₹5,000
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-space-md rounded bg-primary/20 p-space-sm backdrop-blur-sm">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-tertiary-fixed/15 text-tertiary-fixed">
+              <div className="flex items-center gap-space-md rounded-2xl bg-primary/10 p-space-sm">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[50%] bg-primary/10 text-primary">
                   <Shirt className="h-[26px] w-[26px]" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-tertiary-fixed">
+                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-primary">
                     Blouse Included
                   </span>
-                  <span className="font-body-sm text-body-sm text-surface-variant/80">
+                  <span className="font-body-sm text-body-sm text-on-surface-variant">
                     With every saree purchase
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-space-md rounded bg-primary/20 p-space-sm backdrop-blur-sm">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-tertiary-fixed/15 text-tertiary-fixed">
+              <div className="flex items-center gap-space-md rounded-2xl bg-primary/10 p-space-sm">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[50%] bg-primary/10 text-primary">
                   <ShieldCheck className="h-[26px] w-[26px]" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-tertiary-fixed">
+                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-primary">
                     Pan-India Delivery
                   </span>
-                  <span className="font-body-sm text-body-sm text-surface-variant/80">
+                  <span className="font-body-sm text-body-sm text-on-surface-variant">
                     Shipped securely across India
                   </span>
                 </div>
@@ -208,7 +210,14 @@ export default async function HomePage() {
                     alt={cat.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105${
+                      "objectPosition" in cat ? " origin-top" : ""
+                    }`}
+                    style={
+                      "objectPosition" in cat
+                        ? { objectPosition: cat.objectPosition }
+                        : undefined
+                    }
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent opacity-85 transition-opacity group-hover:opacity-90" />
                   <div className="absolute inset-x-6 bottom-8 flex flex-col items-center text-center">

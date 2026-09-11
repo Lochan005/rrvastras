@@ -67,7 +67,7 @@ export default async function ContactPage() {
           <h2 className="text-xl font-serif font-semibold mb-4">Shipping Information</h2>
           <p className="text-muted max-w-2xl mx-auto">
             We ship across India. A flat ₹150 delivery charge applies to standard orders. 
-            Enjoy <span className="font-semibold text-foreground">free shipping</span> on all orders above ₹7,500.
+            Enjoy <span className="font-semibold text-foreground">free shipping</span> on all orders above ₹5,000.
           </p>
         </div>
       </div>

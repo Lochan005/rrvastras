@@ -1,40 +1,26 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export function BrandMark({
   compact = false,
-  inverted = false,
 }: {
   compact?: boolean;
   inverted?: boolean;
 }) {
   return (
-    <Link href="/" className="flex items-center gap-space-sm">
-      <div
+    <Link href="/" aria-label="RR Vastras home" className="flex items-center">
+      <Image
+        src="/logo.png"
+        alt="RR Vastras"
+        width={512}
+        height={512}
         className={cn(
-          "flex items-center justify-center rounded border font-headline-md font-semibold tracking-wider",
-          compact ? "h-8 w-8 text-headline-sm" : "h-9 w-9 text-headline-md",
-          inverted
-            ? "border-tertiary-fixed-dim/40 bg-primary-container text-tertiary-fixed"
-            : "border-tertiary-fixed-dim/30 bg-primary text-tertiary-fixed"
+          "rounded-sm object-cover",
+          compact ? "h-20 w-20" : "h-11 w-11 lg:h-14 lg:w-14"
         )}
-      >
-        RR
-      </div>
-      {compact ? (
-        <span className="font-headline-md text-headline-md font-semibold uppercase tracking-[0.16em] text-surface-container-lowest">
-          RR Vastras
-        </span>
-      ) : (
-        <div className="hidden flex-col lg:flex">
-          <span className="font-headline-sm text-headline-sm font-bold uppercase leading-none tracking-[0.18em] text-primary">
-            RR Vastras
-          </span>
-          <span className="mt-0.5 font-label-eyebrow text-[9px] uppercase tracking-[0.25em] text-outline">
-            Handloom Sarees
-          </span>
-        </div>
-      )}
+        priority
+      />
     </Link>
   );
 }

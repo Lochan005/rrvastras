@@ -4,7 +4,7 @@ import type { StoreSettings } from "@prisma/client";
 const DEFAULT_SETTINGS: StoreSettings = {
   id: "default",
   shippingFlatPaise: 15000,
-  freeShippingMinPaise: 750000,
+  freeShippingMinPaise: 500000,
   lowStockThreshold: 5,
   whatsappNumber:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "919876543210",

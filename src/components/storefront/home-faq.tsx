@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "What are the shipping charges?",
-    a: "We offer complimentary standard insured shipping across India on all orders above ₹7,500. For orders below this amount, a modest flat shipping rate of ₹150 applies at checkout.",
+    a: "We offer complimentary standard insured shipping across India on all orders above ₹5,000. For orders below this amount, a modest flat shipping rate of ₹150 applies at checkout.",
   },
   {
     q: "What payment methods do you accept?",
@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Can I return or exchange a saree?",
-    a: "We stand completely behind the authenticity of our weaves. If your saree is damaged or incorrect upon arrival, simply contact our concierge team via WhatsApp or email within 48 hours of delivery with unboxing photos. The saree must remain unused, unwashed, and folded in its original packaging with tags intact.",
+    a: "We stand completely behind the authenticity of our weaves. If your saree is damaged or incorrect upon arrival, simply contact us via WhatsApp within 48 hours of delivery with unboxing photos. The saree must remain unused, unwashed, and folded in its original packaging with tags intact.",
   },
 ];
 

@@ -44,8 +44,8 @@ export default async function AccountPage() {
             },
           },
         },
-        orderBy: { createdAt: "desc" },
-        take: 5,
+    orderBy: { createdAt: "desc" },
+    take: 5,
       }),
       prisma.order.count({ where: { userId } }),
       prisma.wishlistItem.count({ where: { userId } }),
@@ -263,17 +263,17 @@ export default async function AccountPage() {
                 Authentic Weaves
               </span>
               <h2 className="font-headline-lg text-headline-lg text-on-surface">Recent Orders</h2>
-            </div>
+      </div>
             <Link
               href="/account/orders"
               className="flex items-center gap-1 font-label-button text-label-button text-primary transition-colors hover:text-primary-container"
             >
               <span>View All ({orderCount})</span>
               <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          </Link>
+        </div>
 
-          {orders.length === 0 ? (
+        {orders.length === 0 ? (
             <div className="rounded-xl bg-surface-container-low px-space-lg py-16 text-center">
               <p className="font-headline-sm text-headline-sm text-primary">
                 You haven&apos;t placed any orders yet.

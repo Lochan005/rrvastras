@@ -41,6 +41,10 @@ export const metadata: Metadata = {
     locale: "en_IN",
     siteName: "RR Vastras",
   },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   twitter: {
     card: "summary_large_image",
   },

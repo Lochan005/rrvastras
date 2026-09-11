@@ -160,7 +160,7 @@ model OrderItem {
 model StoreSettings {
   id                   String @id @default("default")
   shippingFlatPaise    Int    @default(15000)
-  freeShippingMinPaise Int    @default(750000)
+  freeShippingMinPaise Int    @default(500000)
   lowStockThreshold    Int    @default(5)
   whatsappNumber       String @default("919876543210")
 }
