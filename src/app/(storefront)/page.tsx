@@ -96,7 +96,7 @@ export default async function HomePage() {
             <div className="flex flex-wrap items-center gap-space-md">
               <Link
                 href="/shop"
-                className="inline-flex items-center justify-center gap-space-xs rounded bg-tertiary-fixed px-space-xl py-space-md font-label-button text-label-button font-bold tracking-wider text-primary uppercase shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-tertiary-fixed-dim"
+                className="inline-flex items-center justify-center gap-space-xs rounded bg-[#E8DCC4] px-space-xl py-space-md font-label-button text-label-button font-bold tracking-wider text-primary uppercase shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#DDD0B4]"
               >
                 <span>Explore Collection</span>
                 <ArrowRight className="h-[18px] w-[18px]" />
