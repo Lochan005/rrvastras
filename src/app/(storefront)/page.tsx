@@ -117,15 +117,6 @@ export default async function HomePage() {
                   Authentic Weave
                 </span>
               </div>
-              <div className="h-7 w-px bg-surface-variant/20" />
-              <div className="flex flex-col">
-                <span className="font-headline-md text-headline-md leading-none font-semibold text-surface-container-lowest">
-                  Free
-                </span>
-                <span className="mt-1 font-label-eyebrow text-[10px] tracking-widest text-surface-variant/70 uppercase">
-                  Matching Blouse
-                </span>
-              </div>
               <div className="h-7 w-px bg-surface-variant/20 hidden sm:block" />
               <div className="hidden flex-col sm:flex">
                 <span className="font-headline-md text-headline-md leading-none font-semibold text-surface-container-lowest">
