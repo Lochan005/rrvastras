@@ -4,6 +4,24 @@ const prisma = new PrismaClient();
 
 const placeholderProducts = [
   {
+    name: "Black Soft Silk Butta Saree",
+    slug: "black-soft-silk-butta-saree",
+    priceInPaise: 390000,
+    fabric: "Soft Silk",
+    description:
+      "The elegant black soft silk butta saree features a rich zari border and pallu that gives a classy look. A rich looking soft silk saree perfect for weddings, festivals and special occasions.",
+    stock: 8,
+    blouseIncluded: true,
+    isPublished: true,
+    images: [
+      {
+        url: "/products/black-soft-silk-butta-saree.jpg",
+        alt: "Black soft silk butta saree with rich gold zari border and pallu",
+        sortOrder: 0,
+      },
+    ],
+  },
+  {
     name: "Elegant Silk Saree",
     slug: "elegant-silk-saree",
     priceInPaise: 899900,
