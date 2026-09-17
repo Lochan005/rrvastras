@@ -1,3 +1,4 @@
+import "@/lib/auth-url";
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
 import type { Role } from "@prisma/client";
@@ -27,6 +28,7 @@ export const authConfig = {
   ],
   pages: {
     signIn: "/auth/signin",
+    error: "/auth/error",
   },
   session: {
     strategy: "jwt",
