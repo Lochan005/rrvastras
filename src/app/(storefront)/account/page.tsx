@@ -142,6 +142,7 @@ export default async function AccountPage() {
             >
               Preferences
             </Link>
+            <SignOutButton />
             <Link
               href="/shop"
               className="inline-flex items-center gap-1.5 rounded bg-primary px-5 py-2.5 font-label-button text-label-button text-on-primary shadow-sm transition-colors hover:bg-primary-container"
@@ -536,7 +537,7 @@ export default async function AccountPage() {
               >
                 Update Addresses
               </Link>
-              <SignOutButton />
+              <SignOutButton className="w-full" />
             </div>
           </div>
         </div>

@@ -1,19 +1,15 @@
+import { normalizeOrigin } from "@/lib/utils";
+
 /**
  * Auth.js builds Google's redirect_uri from AUTH_URL. Vercel often sets that
  * to *.vercel.app, while shoppers sign in on the custom domain — so the PKCE
  * cookie is stored on www.rrvastras.in and the callback lands on vercel.app.
  */
 function originIfCustom(value?: string): string | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) return undefined;
-  try {
-    const href = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-    const origin = new URL(href).origin;
-    if (new URL(origin).hostname.endsWith(".vercel.app")) return undefined;
-    return origin;
-  } catch {
-    return undefined;
-  }
+  const origin = normalizeOrigin(value);
+  if (!origin) return undefined;
+  if (new URL(origin).hostname.endsWith(".vercel.app")) return undefined;
+  return origin;
 }
 
 export function applyCanonicalAuthUrl() {

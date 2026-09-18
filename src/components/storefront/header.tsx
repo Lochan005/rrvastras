@@ -6,6 +6,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import {
   ChevronRight,
   Heart,
+  LogOut,
   Menu,
   Search,
   ShoppingBag,
@@ -29,7 +30,9 @@ export function Header() {
   const { data: session } = useSession();
   const { count } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const pathname = usePathname();
+  const isAdmin = session?.user?.role === "admin";
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
@@ -37,6 +40,10 @@ export function Header() {
       document.body.style.overflow = "unset";
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    setAccountOpen(false);
+  }, [pathname]);
 
   return (
     <div className="fixed top-0 left-0 z-50 w-full">
@@ -98,22 +105,54 @@ export function Header() {
               <Heart className="h-5 w-5" />
             </Link>
             {session ? (
-              <Link
-                href="/account"
-                aria-label="Account"
-                className="hidden p-space-2xs text-on-surface-variant transition-colors hover:text-primary lg:inline-flex"
-              >
-                {session.user.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={session.user.image}
-                    alt=""
-                    className="h-8 w-8 rounded-full border border-outline-variant/80 object-cover"
-                  />
-                ) : (
-                  <User className="h-5 w-5" />
+              <div className="relative hidden lg:block">
+                <button
+                  type="button"
+                  aria-label="Account menu"
+                  aria-expanded={accountOpen}
+                  className="inline-flex p-space-2xs text-on-surface-variant transition-colors hover:text-primary"
+                  onClick={() => setAccountOpen((open) => !open)}
+                >
+                  {session.user.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={session.user.image}
+                      alt=""
+                      className="h-8 w-8 rounded-full border border-outline-variant/80 object-cover"
+                    />
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
+                </button>
+                {accountOpen && (
+                  <div className="absolute right-0 mt-2 w-52 rounded-lg border border-outline-variant bg-surface-container-lowest py-1 shadow-lg">
+                    <Link
+                      href="/account"
+                      className="block px-4 py-2.5 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      My Account
+                    </Link>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="block px-4 py-2.5 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        Admin
+                      </Link>
+                    )}
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left font-body-sm text-body-sm text-error hover:bg-error-container"
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Log out
+                    </button>
+                  </div>
                 )}
-              </Link>
+              </div>
             ) : (
               <button
                 type="button"
@@ -190,15 +229,25 @@ export function Header() {
                     <User className="h-5 w-5 text-outline" />
                     Account
                   </Link>
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center gap-3 px-2 py-2 text-sm text-on-surface"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Admin
+                    </Link>
+                  )}
                   <button
                     type="button"
                     onClick={() => {
-                      signOut();
+                      signOut({ callbackUrl: "/" });
                       setMobileOpen(false);
                     }}
-                    className="flex items-center gap-3 px-2 py-2 text-left text-sm text-destructive"
+                    className="flex items-center gap-3 px-2 py-2 text-left text-sm text-error"
                   >
-                    Sign out
+                    <LogOut className="h-5 w-5" />
+                    Log out
                   </button>
                 </>
               ) : (

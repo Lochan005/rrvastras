@@ -32,6 +32,26 @@ export function generateOrderNumber(): string {
   return `RRV-${ymd}-${rand}`;
 }
 
+/** Collapse typos like www..rrvastras.in into a valid origin. */
+export function normalizeOrigin(value?: string | null): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+  try {
+    const href = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    const url = new URL(href);
+    const host = url.hostname
+      .toLowerCase()
+      .split(".")
+      .filter((label) => label.length > 0)
+      .join(".");
+    if (!host) return undefined;
+    const port = url.port ? `:${url.port}` : "";
+    return `${url.protocol}//${host}${port}`;
+  } catch {
+    return undefined;
+  }
+}
+
 export function getSiteUrl(): string {
   const candidates = [
     process.env.NEXT_PUBLIC_SITE_URL,
@@ -43,13 +63,8 @@ export function getSiteUrl(): string {
   ];
 
   for (const value of candidates) {
-    const trimmed = value?.trim();
-    if (!trimmed) continue;
-    try {
-      return new URL(trimmed).origin;
-    } catch {
-      continue;
-    }
+    const origin = normalizeOrigin(value);
+    if (origin) return origin;
   }
 
   return "http://localhost:3000";
