@@ -6,6 +6,7 @@ import {
   getCartFromStorage,
   saveCartToStorage,
   getCartCount,
+  capLineQuantity,
 } from "@/lib/cart";
 
 interface CartContextValue {
@@ -38,13 +39,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     (item: Omit<CartItem, "quantity">, quantity = 1) => {
       setItems((prev) => {
         const existing = prev.find((i) => i.productId === item.productId);
+        const nextQty = capLineQuantity(
+          (existing?.quantity ?? 0) + quantity,
+          item.stock
+        );
+        if (nextQty <= 0) return prev;
         if (existing) {
-          const newQty = Math.min(existing.quantity + quantity, item.stock);
           return prev.map((i) =>
-            i.productId === item.productId ? { ...i, quantity: newQty } : i
+            i.productId === item.productId ? { ...i, quantity: nextQty } : i
           );
         }
-        return [...prev, { ...item, quantity: Math.min(quantity, item.stock) }];
+        return [...prev, { ...item, quantity: nextQty }];
       });
     },
     []
@@ -59,8 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       prev
         .map((i) => {
           if (i.productId !== productId) return i;
-          const qty = Math.max(1, Math.min(quantity, i.stock));
-          return { ...i, quantity: qty };
+          return { ...i, quantity: capLineQuantity(quantity, i.stock) };
         })
         .filter((i) => i.quantity > 0)
     );

@@ -42,7 +42,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       priceInPaise,
       fabric,
       description: description ?? "",
-      stock: stock ?? 0,
+      stock: stock ?? 1,
       blouseIncluded: blouseIncluded ?? true,
       isPublished: isPublished ?? false,
       images: {

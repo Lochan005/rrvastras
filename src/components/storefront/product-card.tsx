@@ -2,20 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Product, ProductImage } from "@prisma/client";
 import { cn, formatINR } from "@/lib/utils";
-import { getStockStatus } from "@/lib/store";
 import { WishlistButton } from "./wishlist-button";
 
 type ProductWithImages = Product & { images: ProductImage[] };
 
 interface ProductCardProps {
   product: ProductWithImages;
-  lowStockThreshold: number;
 }
 
-export function ProductCard({ product, lowStockThreshold }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
   const image = product.images[0];
-  const stockStatus = getStockStatus(product.stock, lowStockThreshold);
-  const isOut = stockStatus === "out_of_stock";
+  const isOut = product.stock <= 0;
   const isNew =
     Date.now() - new Date(product.createdAt).getTime() <
     1000 * 60 * 60 * 24 * 21;
@@ -57,12 +54,7 @@ export function ProductCard({ product, lowStockThreshold }: ProductCardProps) {
 
         {!isOut && (
           <div className="absolute top-space-sm left-space-sm z-10 flex flex-col items-start gap-1">
-            {stockStatus === "low_stock" && (
-              <span className="rounded bg-tertiary-fixed px-space-xs py-0.5 font-label-badge text-label-badge font-bold tracking-wider text-tertiary-container uppercase shadow-xs">
-                Only {product.stock} left
-              </span>
-            )}
-            {stockStatus === "in_stock" && isNew && (
+            {isNew && (
               <span className="rounded bg-primary px-space-xs py-0.5 font-label-badge text-label-badge font-bold tracking-wider text-on-primary uppercase shadow-xs">
                 New
               </span>
@@ -107,10 +99,6 @@ export function ProductCard({ product, lowStockThreshold }: ProductCardProps) {
           {isOut ? (
             <span className="rounded bg-surface-variant px-space-xs py-0.5 font-label-badge text-[10px] font-semibold text-on-surface-variant uppercase">
               Restocking Soon
-            </span>
-          ) : product.blouseIncluded ? (
-            <span className="rounded bg-surface-container-high px-space-xs py-0.5 text-right font-label-badge text-[10px] font-bold tracking-wide text-primary uppercase">
-              Blouse Piece Included
             </span>
           ) : null}
         </div>

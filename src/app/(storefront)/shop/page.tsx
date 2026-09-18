@@ -296,7 +296,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                     <ProductCard
                       key={product.id}
                       product={product}
-                      lowStockThreshold={settings.lowStockThreshold}
                     />
                   ))}
                 </div>

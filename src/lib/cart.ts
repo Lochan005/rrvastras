@@ -10,12 +10,23 @@ export interface CartItem {
 }
 
 export const CART_STORAGE_KEY = "rrvastras-cart";
+export const MAX_LINE_QUANTITY = 1;
+
+export function capLineQuantity(quantity: number, stock: number): number {
+  return Math.max(0, Math.min(quantity, stock, MAX_LINE_QUANTITY));
+}
 
 export function getCartFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    const items = raw ? (JSON.parse(raw) as CartItem[]) : [];
+    return items
+      .map((item) => ({
+        ...item,
+        quantity: capLineQuantity(item.quantity, item.stock),
+      }))
+      .filter((item) => item.quantity > 0);
   } catch {
     return [];
   }

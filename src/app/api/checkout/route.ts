@@ -8,6 +8,7 @@ import {
 } from "@/lib/cashfree";
 import { calculateShipping, getStoreSettings } from "@/lib/store";
 import { generateOrderNumber } from "@/lib/utils";
+import { MAX_LINE_QUANTITY } from "@/lib/cart";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -50,19 +51,20 @@ export async function POST(request: Request) {
 
   for (const item of items) {
     const product = products.find((p) => p.id === item.productId);
-    if (!product || product.stock < item.quantity) {
+    const quantity = Math.min(Number(item.quantity) || 0, MAX_LINE_QUANTITY);
+    if (!product || quantity < 1 || product.stock < quantity) {
       return NextResponse.json(
         { error: `${product?.name ?? "Product"} is out of stock` },
         { status: 400 }
       );
     }
-    subtotalInPaise += product.priceInPaise * item.quantity;
+    subtotalInPaise += product.priceInPaise * quantity;
     orderItems.push({
       productId: product.id,
       productName: product.name,
       productSlug: product.slug,
       priceInPaise: product.priceInPaise,
-      quantity: item.quantity,
+      quantity,
     });
   }
 

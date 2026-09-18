@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       priceInPaise,
       fabric,
       description: description ?? "",
-      stock: stock ?? 0,
+      stock: stock ?? 1,
       blouseIncluded: blouseIncluded ?? true,
       isPublished: isPublished ?? false,
       images: {

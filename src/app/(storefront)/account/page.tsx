@@ -13,7 +13,6 @@ import {
   Package,
   Phone,
   ShieldCheck,
-  Shirt,
   ShoppingBag,
   Truck,
 } from "lucide-react";
@@ -391,11 +390,6 @@ export default async function AccountPage() {
                                       {item.product.fabric}
                                     </span>
                                   )}
-                                  {item.product?.blouseIncluded && (
-                                    <span className="rounded bg-surface-container-low px-2 py-0.5 text-[10px] font-semibold text-primary">
-                                      Blouse Piece Included
-                                    </span>
-                                  )}
                                 </div>
                                 <h3 className="font-headline-sm text-headline-sm text-on-surface">
                                   {item.productName}
@@ -472,19 +466,6 @@ export default async function AccountPage() {
                   </h4>
                   <p className="pt-0.5 font-body-sm text-body-sm text-on-surface-variant">
                     Silk drapes carry verified artisan weave tags and authenticity seals.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-space-sm">
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-secondary-container/30 text-primary">
-                  <Shirt className="h-[18px] w-[18px]" />
-                </div>
-                <div>
-                  <h4 className="font-headline-sm text-[15px] leading-tight text-on-surface">
-                    Complimentary Blouse Piece
-                  </h4>
-                  <p className="pt-0.5 font-body-sm text-body-sm text-on-surface-variant">
-                    Matching unstitched blouse fabric included with every saree.
                   </p>
                 </div>
               </div>

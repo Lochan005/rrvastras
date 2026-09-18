@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/db";
-import { getStoreSettings } from "@/lib/store";
 import { formatINR } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default async function AdminDashboard() {
   await requireAdmin();
-  const settings = await getStoreSettings();
 
   const [orderCount, pendingOrders, lowStockProducts, recentOrders] =
     await Promise.all([
@@ -16,7 +14,7 @@ export default async function AdminDashboard() {
       prisma.order.count({ where: { status: "confirmed" } }),
       prisma.product.findMany({
         where: {
-          stock: { gt: 0, lte: settings.lowStockThreshold },
+          stock: { lte: 0 },
           isPublished: true,
         },
         take: 5,
@@ -56,7 +54,7 @@ export default async function AdminDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted">
-              Low Stock Items
+              Out of Stock
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -67,7 +65,7 @@ export default async function AdminDashboard() {
 
       {lowStockProducts.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-lg font-medium">Low Stock Alert</h2>
+          <h2 className="text-lg font-medium">Out of Stock</h2>
           <div className="mt-4 space-y-2">
             {lowStockProducts.map((p) => (
               <div
@@ -80,7 +78,7 @@ export default async function AdminDashboard() {
                 >
                   {p.name}
                 </Link>
-                <Badge variant="warning">{p.stock} left</Badge>
+                <Badge variant="warning">Unavailable</Badge>
               </div>
             ))}
           </div>

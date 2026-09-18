@@ -10,7 +10,7 @@ const placeholderProducts = [
     fabric: "Soft Silk",
     description:
       "The elegant black soft silk butta saree features a rich zari border and pallu that gives a classy look. A rich looking soft silk saree perfect for weddings, festivals and special occasions.",
-    stock: 8,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -28,7 +28,7 @@ const placeholderProducts = [
     fabric: "Pure Silk",
     description:
       "A timeless silk saree with intricate weaving. Perfect for festive occasions and celebrations.",
-    stock: 12,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -46,7 +46,7 @@ const placeholderProducts = [
     fabric: "Banarasi Silk",
     description:
       "Handwoven Banarasi saree featuring traditional motifs and a luxurious drape.",
-    stock: 4,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -64,7 +64,7 @@ const placeholderProducts = [
     fabric: "Cotton",
     description:
       "Lightweight handloom cotton saree ideal for daily wear and casual gatherings.",
-    stock: 20,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -82,7 +82,7 @@ const placeholderProducts = [
     fabric: "Kanjivaram Silk",
     description:
       "Classic Kanjivaram saree with contrasting border and temple-inspired motifs.",
-    stock: 3,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -100,7 +100,7 @@ const placeholderProducts = [
     fabric: "Chiffon",
     description:
       "Flowing chiffon saree with delicate embellishments for evening events.",
-    stock: 8,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -118,7 +118,7 @@ const placeholderProducts = [
     fabric: "Linen",
     description:
       "Breathable linen saree with a modern minimalist appeal for warm weather.",
-    stock: 15,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -136,7 +136,7 @@ const placeholderProducts = [
     fabric: "Georgette",
     description:
       "Stylish georgette saree with sequin details, perfect for parties and receptions.",
-    stock: 6,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -154,7 +154,7 @@ const placeholderProducts = [
     fabric: "Tussar Silk",
     description:
       "Heritage tussar silk saree with natural texture and earthy elegance.",
-    stock: 0,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -172,7 +172,7 @@ const placeholderProducts = [
     fabric: "Organza",
     description:
       "Sheer organza saree with floral embroidery for festive celebrations.",
-    stock: 10,
+    stock: 1,
     blouseIncluded: true,
     isPublished: true,
     images: [
@@ -189,7 +189,7 @@ const placeholderProducts = [
     priceInPaise: 500000,
     fabric: "TBD",
     description: "Placeholder product — details to be updated by admin.",
-    stock: 5,
+    stock: 1,
     blouseIncluded: true,
     isPublished: false,
     images: [
@@ -219,13 +219,15 @@ async function main() {
     const { images, ...data } = product;
     await prisma.product.upsert({
       where: { slug: data.slug },
-      update: {},
+      update: { stock: 1 },
       create: {
         ...data,
         images: { create: images },
       },
     });
   }
+
+  await prisma.product.updateMany({ data: { stock: 1 } });
 
   console.log("Seed completed successfully.");
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Shirt, Truck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getStoreSettings } from "@/lib/store";
 import { ProductCard } from "@/components/storefront/product-card";
@@ -132,7 +132,7 @@ export default async function HomePage() {
 
         <section className="relative z-20 w-full bg-[#FFFFFF] py-space-lg shadow-sm">
           <div className="mx-auto max-w-[1360px] px-gutter-mobile lg:px-gutter-desktop">
-            <div className="grid grid-cols-1 items-center gap-space-lg md:grid-cols-3 lg:gap-space-2xl">
+            <div className="grid grid-cols-1 items-center gap-space-lg md:grid-cols-2 lg:gap-space-2xl">
               <div className="flex items-center gap-space-md rounded-2xl bg-primary/10 p-space-sm">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[50%] bg-primary/10 text-primary">
                   <Truck className="h-[26px] w-[26px]" />
@@ -143,19 +143,6 @@ export default async function HomePage() {
                   </span>
                   <span className="font-body-sm text-body-sm text-on-surface-variant">
                     On orders above ₹5,000
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center gap-space-md rounded-2xl bg-primary/10 p-space-sm">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[50%] bg-primary/10 text-primary">
-                  <Shirt className="h-[26px] w-[26px]" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-headline-sm text-headline-sm leading-snug tracking-wide text-primary">
-                    Blouse Included
-                  </span>
-                  <span className="font-body-sm text-body-sm text-on-surface-variant">
-                    With every saree purchase
                   </span>
                 </div>
               </div>
@@ -259,7 +246,6 @@ export default async function HomePage() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    lowStockThreshold={settings.lowStockThreshold}
                   />
                 ))}
               </div>

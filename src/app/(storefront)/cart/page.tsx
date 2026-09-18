@@ -7,7 +7,7 @@ import { formatINR } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, count } = useCart();
+  const { items, removeItem, count } = useCart();
 
   if (items.length === 0) {
     return (
@@ -72,28 +72,6 @@ export default function CartPage() {
                   </p>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                  <div className="flex items-center rounded-sm border border-border bg-transparent h-9">
-                    <button
-                      className="px-3 h-full hover:text-primary transition-colors"
-                      onClick={() =>
-                        updateQuantity(item.productId, item.quantity - 1)
-                      }
-                    >
-                      −
-                    </button>
-                    <span className="px-2 text-sm font-medium">{item.quantity}</span>
-                    <button
-                      className="px-3 h-full hover:text-primary transition-colors"
-                      onClick={() =>
-                        updateQuantity(
-                          item.productId,
-                          Math.min(item.stock, item.quantity + 1)
-                        )
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
                   <button
                     className="text-sm text-muted hover:text-destructive transition-colors underline underline-offset-4"
                     onClick={() => removeItem(item.productId)}

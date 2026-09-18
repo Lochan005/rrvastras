@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getStoreSettings, getStockStatus } from "@/lib/store";
 import { formatINR, getSiteUrl } from "@/lib/utils";
 import { ProductGallery } from "@/components/storefront/product-gallery";
 import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
@@ -44,7 +43,6 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const settings = await getStoreSettings();
 
   const product = await prisma.product.findUnique({
     where: { slug, isPublished: true },
@@ -53,7 +51,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product) notFound();
 
-  const stockStatus = getStockStatus(product.stock, settings.lowStockThreshold);
+  const isOut = product.stock <= 0;
   const productJsonLd = buildProductJsonLd(product);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", url: getSiteUrl() },
@@ -85,11 +83,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="text-sm font-medium uppercase tracking-wider text-muted">
                   {product.fabric}
                 </span>
-                {stockStatus === "out_of_stock" && (
+                {isOut && (
                   <Badge variant="destructive">Out of stock</Badge>
-                )}
-                {stockStatus === "low_stock" && (
-                  <Badge variant="warning">Only {product.stock} left</Badge>
                 )}
               </div>
               <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground leading-tight">
@@ -115,17 +110,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <span className="font-semibold w-24 shrink-0">Fabric:</span>
                   <span>{product.fabric}</span>
                 </li>
-                {product.blouseIncluded && (
-                  <li className="flex items-start gap-2">
-                    <span className="font-semibold w-24 shrink-0">Blouse:</span>
-                    <span className="text-success flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Included
-                    </span>
-                  </li>
-                )}
               </ul>
             </div>
 
@@ -141,7 +125,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     imageUrl: product.images[0]?.url ?? "",
                     imageAlt: product.images[0]?.alt ?? product.name,
                   }}
-                  disabled={stockStatus === "out_of_stock"}
+                  disabled={isOut}
                 />
               </div>
               <WishlistButton productId={product.id} />

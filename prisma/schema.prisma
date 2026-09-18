@@ -92,7 +92,7 @@ model Product {
   priceInPaise    Int
   fabric          String
   description     String         @default("")
-  stock           Int            @default(0)
+  stock           Int            @default(1)
   blouseIncluded  Boolean        @default(true)
   isPublished     Boolean        @default(false)
   createdAt       DateTime       @default(now())

@@ -2,12 +2,10 @@ import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
 import { requireAuth } from "@/lib/session";
 import { prisma } from "@/lib/db";
-import { getStoreSettings } from "@/lib/store";
 import { ProductCard } from "@/components/storefront/product-card";
 
 export default async function WishlistPage() {
   const session = await requireAuth();
-  const settings = await getStoreSettings();
 
   const items = await prisma.wishlistItem.findMany({
     where: { userId: session.user.id },
@@ -65,7 +63,6 @@ export default async function WishlistPage() {
             <ProductCard
               key={item.id}
               product={item.product}
-              lowStockThreshold={settings.lowStockThreshold}
             />
           ))}
         </div>

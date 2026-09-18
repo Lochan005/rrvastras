@@ -38,11 +38,6 @@ export function calculateShipping(
   return settings.shippingFlatPaise;
 }
 
-export function getStockStatus(
-  stock: number,
-  lowStockThreshold: number
-): "out_of_stock" | "low_stock" | "in_stock" {
-  if (stock <= 0) return "out_of_stock";
-  if (stock <= lowStockThreshold) return "low_stock";
-  return "in_stock";
+export function getStockStatus(stock: number): "out_of_stock" | "in_stock" {
+  return stock <= 0 ? "out_of_stock" : "in_stock";
 }

@@ -28,7 +28,7 @@ export function ProductForm({ product }: ProductFormProps) {
     priceInPaise: product ? (product.priceInPaise / 100).toString() : "",
     fabric: product?.fabric ?? "",
     description: product?.description ?? "",
-    stock: product?.stock?.toString() ?? "0",
+    stock: product?.stock?.toString() ?? "1",
     blouseIncluded: product?.blouseIncluded ?? true,
     isPublished: product?.isPublished ?? false,
   });
@@ -194,6 +194,9 @@ export function ProductForm({ product }: ProductFormProps) {
           value={form.stock}
           onChange={(e) => setForm({ ...form, stock: e.target.value })}
         />
+        <p className="mt-1 text-xs text-muted">
+          Default is 1. Shoppers can buy one of each saree. Remaining quantity is never shown on the store.
+        </p>
       </div>
       <div className="flex items-center gap-4">
         <label className="flex items-center gap-2 text-sm">
