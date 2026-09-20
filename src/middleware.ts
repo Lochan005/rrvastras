@@ -16,7 +16,7 @@ export default auth((req) => {
       return NextResponse.redirect(signInUrl);
     }
     if (req.auth?.user?.role !== "admin") {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/auth/error?error=NotAdmin", req.url));
     }
   }
 
@@ -35,5 +35,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/checkout/:path*", "/account/:path*"],
+  matcher: ["/admin", "/admin/:path*", "/checkout/:path*", "/account/:path*"],
 };

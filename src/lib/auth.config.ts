@@ -18,6 +18,12 @@ declare module "next-auth" {
   }
 }
 
+export function isAdminEmail(email?: string | null): boolean {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail || !email) return false;
+  return email.trim().toLowerCase() === adminEmail.trim().toLowerCase();
+}
+
 export const authConfig = {
   trustHost: true,
   providers: [
@@ -38,6 +44,9 @@ export const authConfig = {
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: Role }).role ?? "customer";
+      }
+      if (isAdminEmail(user?.email) || isAdminEmail(token.email as string | undefined)) {
+        token.role = "admin";
       }
       return token;
     },

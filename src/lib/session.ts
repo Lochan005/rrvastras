@@ -15,7 +15,7 @@ export async function requireAdmin() {
     redirect("/auth/signin?callbackUrl=/admin");
   }
   if (session.user.role !== "admin") {
-    redirect("/");
+    redirect("/auth/error?error=NotAdmin");
   }
   return session;
 }

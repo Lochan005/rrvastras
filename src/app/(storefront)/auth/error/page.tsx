@@ -9,6 +9,10 @@ const ERROR_COPY: Record<string, { title: string; body: string }> = {
     title: "Access was denied",
     body: "This Google account could not be signed in. Try another account, or contact us if you believe this is a mistake.",
   },
+  NotAdmin: {
+    title: "Admin access only",
+    body: "This page is limited to the store admin Google account. Sign out, then sign in with the email set as ADMIN_EMAIL.",
+  },
   Verification: {
     title: "Sign-in link expired",
     body: "That sign-in attempt is no longer valid. Please start again from the sign-in page.",

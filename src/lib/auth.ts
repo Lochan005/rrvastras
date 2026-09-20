@@ -2,7 +2,7 @@ import "@/lib/auth-url";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db";
-import { authConfig } from "@/lib/auth.config";
+import { authConfig, isAdminEmail } from "@/lib/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -14,9 +14,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
-          select: { role: true },
+          select: { role: true, email: true },
         });
-        token.role = dbUser?.role ?? "customer";
+        const email = dbUser?.email ?? user.email ?? (token.email as string | undefined);
+        const shouldBeAdmin = isAdminEmail(email) || dbUser?.role === "admin";
+
+        if (isAdminEmail(email) && dbUser && dbUser.role !== "admin") {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: "admin" },
+          });
+        }
+
+        token.role = shouldBeAdmin ? "admin" : (dbUser?.role ?? "customer");
+      } else if (isAdminEmail(token.email as string | undefined)) {
+        token.role = "admin";
       }
       return token;
     },
@@ -30,8 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   events: {
     async createUser({ user }) {
-      const adminEmail = process.env.ADMIN_EMAIL;
-      if (adminEmail && user.email === adminEmail) {
+      if (user.id && isAdminEmail(user.email)) {
         await prisma.user.update({
           where: { id: user.id },
           data: { role: "admin" },
