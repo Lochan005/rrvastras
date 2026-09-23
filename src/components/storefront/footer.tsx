@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Camera, Share2 } from "lucide-react";
 import { BrandMark } from "./brand-mark";
+import { ExchangeReturnPolicyDialog } from "./exchange-return-policy-dialog";
 import { getStoreSettings } from "@/lib/store";
 import { getWhatsAppUrl } from "@/lib/utils";
 
@@ -84,9 +85,10 @@ export async function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="transition-colors hover:text-tertiary-fixed">
-                  Returns &amp; Exchanges
-                </Link>
+                <ExchangeReturnPolicyDialog
+                  triggerLabel="Returns & Exchanges"
+                  triggerClassName="text-left text-surface-variant/80 no-underline transition-colors hover:text-tertiary-fixed"
+                />
               </li>
             </ul>
           </div>

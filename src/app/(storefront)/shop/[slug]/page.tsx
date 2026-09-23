@@ -10,6 +10,7 @@ import {
 import { ProductGallery } from "@/components/storefront/product-gallery";
 import { ProductPrice } from "@/components/storefront/product-price";
 import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
+import { ExchangeReturnPolicyDialog } from "@/components/storefront/exchange-return-policy-dialog";
 import { WishlistButton } from "@/components/storefront/wishlist-button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -116,9 +117,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <p>{product.description}</p>
                 </div>
               )}
-              <p className="text-sm font-medium leading-relaxed text-on-surface">
-                {SALE_RETURN_NOTE}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm font-medium leading-relaxed text-on-surface">
+                  {SALE_RETURN_NOTE}
+                </p>
+                <ExchangeReturnPolicyDialog triggerClassName="text-sm font-medium text-primary" />
+              </div>
 
               <ul className="space-y-3 text-sm text-foreground">
                 <li className="flex items-start gap-2">
@@ -163,7 +167,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-gold">✦</span>
-                  {SALE_RETURN_NOTE}
+                  <span>
+                    {SALE_RETURN_NOTE}{" "}
+                    <ExchangeReturnPolicyDialog triggerClassName="text-sm font-medium text-primary" />
+                  </span>
                 </li>
               </ul>
             </div>
