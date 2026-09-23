@@ -86,20 +86,21 @@ model Address {
 }
 
 model Product {
-  id              String         @id @default(cuid())
-  name            String
-  slug            String         @unique
-  priceInPaise    Int
-  fabric          String
-  description     String         @default("")
-  stock           Int            @default(1)
-  blouseIncluded  Boolean        @default(true)
-  isPublished     Boolean        @default(false)
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  images          ProductImage[]
-  wishlistItems   WishlistItem[]
-  orderItems      OrderItem[]
+  id                    String         @id @default(cuid())
+  name                  String
+  slug                  String         @unique
+  priceInPaise          Int
+  compareAtPriceInPaise Int?
+  fabric                String
+  description           String         @default("")
+  stock                 Int            @default(1)
+  blouseIncluded        Boolean        @default(true)
+  isPublished           Boolean        @default(false)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  images                ProductImage[]
+  wishlistItems         WishlistItem[]
+  orderItems            OrderItem[]
 }
 
 model ProductImage {

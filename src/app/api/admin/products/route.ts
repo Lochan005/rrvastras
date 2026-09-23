@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/pricing";
 import { NextResponse } from "next/server";
 
 async function checkAdmin() {
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
     name,
     slug,
     priceInPaise,
+    compareAtPriceInPaise,
     fabric,
     description,
     stock,
@@ -47,11 +49,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Slug already exists" }, { status: 400 });
   }
 
+  const compareAt =
+    compareAtPriceInPaise == null || compareAtPriceInPaise === ""
+      ? null
+      : Number(compareAtPriceInPaise);
+  if (
+    compareAt != null &&
+    (!Number.isFinite(compareAt) || getDiscountPercent(compareAt, priceInPaise) == null)
+  ) {
+    return NextResponse.json(
+      { error: "Original price must be higher than the current price" },
+      { status: 400 }
+    );
+  }
+
   const product = await prisma.product.create({
     data: {
       name,
       slug: slug || slugify(name),
       priceInPaise,
+      compareAtPriceInPaise: compareAt,
       fabric,
       description: description ?? "",
       stock: stock ?? 1,

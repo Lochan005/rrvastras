@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     q: "How long does delivery take?",
-    a: "Each saree undergoes our rigorous manual hand-inspection and iron press check. Orders are dispatched from our boutique warehouse within 2–3 business days. Final transit with our courier partners takes between 5–7 business days anywhere in India.",
+    a: "Each saree undergoes our rigorous manual hand-inspection and iron press check. Delivery takes 5–7 days anywhere in India.",
   },
   {
     q: "Can I return or exchange a saree?",
-    a: "We stand completely behind the authenticity of our weaves. If your saree is damaged or incorrect upon arrival, simply contact us via WhatsApp within 48 hours of delivery with unboxing photos. The saree must remain unused, unwashed, and folded in its original packaging with tags intact.",
+    a: "Please Note: Products purchased during the sale period are not eligible for return, exchange or refund. If your saree arrives damaged or incorrect, contact us on WhatsApp with unboxing photos.",
   },
 ];
 

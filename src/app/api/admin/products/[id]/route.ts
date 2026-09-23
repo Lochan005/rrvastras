@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/pricing";
 import { NextResponse } from "next/server";
 
 async function checkAdmin() {
@@ -24,6 +25,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     name,
     slug,
     priceInPaise,
+    compareAtPriceInPaise,
     fabric,
     description,
     stock,
@@ -31,6 +33,20 @@ export async function PUT(request: Request, { params }: RouteParams) {
     isPublished,
     images,
   } = body;
+
+  const compareAt =
+    compareAtPriceInPaise == null || compareAtPriceInPaise === ""
+      ? null
+      : Number(compareAtPriceInPaise);
+  if (
+    compareAt != null &&
+    (!Number.isFinite(compareAt) || getDiscountPercent(compareAt, priceInPaise) == null)
+  ) {
+    return NextResponse.json(
+      { error: "Original price must be higher than the current price" },
+      { status: 400 }
+    );
+  }
 
   await prisma.productImage.deleteMany({ where: { productId: id } });
 
@@ -40,6 +56,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       name,
       slug: slug || slugify(name),
       priceInPaise,
+      compareAtPriceInPaise: compareAt,
       fabric,
       description: description ?? "",
       stock: stock ?? 1,

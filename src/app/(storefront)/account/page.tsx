@@ -478,7 +478,7 @@ export default async function AccountPage() {
                     Insured Pan-India Transit
                   </h4>
                   <p className="pt-0.5 font-body-sm text-body-sm text-on-surface-variant">
-                    Dispatched securely with a 48-hour return window for unused items.
+                    Delivery within 5–7 days. Sale purchases are not eligible for return, exchange or refund.
                   </p>
                 </div>
               </div>

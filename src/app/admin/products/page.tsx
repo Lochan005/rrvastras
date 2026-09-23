@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/pricing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -28,16 +29,34 @@ export default async function AdminProductsPage() {
             <tr className="border-b border-border text-left">
               <th className="pb-3 pr-4">Name</th>
               <th className="pb-3 pr-4">Price</th>
+              <th className="pb-3 pr-4">Off</th>
               <th className="pb-3 pr-4">Stock</th>
               <th className="pb-3 pr-4">Status</th>
               <th className="pb-3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {products.map((product) => {
+              const discountPercent = getDiscountPercent(
+                product.compareAtPriceInPaise,
+                product.priceInPaise
+              );
+              return (
               <tr key={product.id} className="border-b border-border">
                 <td className="py-3 pr-4 font-medium">{product.name}</td>
-                <td className="py-3 pr-4">{formatINR(product.priceInPaise)}</td>
+                <td className="py-3 pr-4">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <span>{formatINR(product.priceInPaise)}</span>
+                    {discountPercent != null && product.compareAtPriceInPaise != null ? (
+                      <span className="text-muted line-through">
+                        {formatINR(product.compareAtPriceInPaise)}
+                      </span>
+                    ) : null}
+                  </div>
+                </td>
+                <td className="py-3 pr-4">
+                  {discountPercent != null ? `${discountPercent}%` : "—"}
+                </td>
                 <td className="py-3 pr-4">{product.stock}</td>
                 <td className="py-3 pr-4">
                   <Badge variant={product.isPublished ? "success" : "outline"}>
@@ -53,7 +72,8 @@ export default async function AdminProductsPage() {
                   </Link>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

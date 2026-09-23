@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Product, ProductImage } from "@prisma/client";
-import { cn, formatINR } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getDiscountPercent } from "@/lib/pricing";
+import { ProductPrice } from "./product-price";
 import { WishlistButton } from "./wishlist-button";
 
 type ProductWithImages = Product & { images: ProductImage[] };
@@ -13,6 +15,10 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const image = product.images[0];
   const isOut = product.stock <= 0;
+  const discountPercent = getDiscountPercent(
+    product.compareAtPriceInPaise,
+    product.priceInPaise
+  );
   const isNew =
     Date.now() - new Date(product.createdAt).getTime() <
     1000 * 60 * 60 * 24 * 21;
@@ -54,6 +60,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {!isOut && (
           <div className="absolute top-space-sm left-space-sm z-10 flex flex-col items-start gap-1">
+            {discountPercent != null && (
+              <span className="rounded bg-error px-space-xs py-0.5 font-label-badge text-label-badge font-bold tracking-wider text-on-error uppercase shadow-xs">
+                {discountPercent}%
+              </span>
+            )}
             {isNew && (
               <span className="rounded bg-primary px-space-xs py-0.5 font-label-badge text-label-badge font-bold tracking-wider text-on-primary uppercase shadow-xs">
                 New
@@ -88,14 +99,13 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
         </div>
         <div className="flex items-end justify-between gap-space-xs pt-space-xs">
-          <span
-            className={cn(
-              "font-price-lg text-price-lg",
-              isOut ? "text-outline" : "text-primary"
-            )}
-          >
-            {formatINR(product.priceInPaise)}
-          </span>
+          <div className="min-w-0">
+            <ProductPrice
+              priceInPaise={product.priceInPaise}
+              compareAtPriceInPaise={product.compareAtPriceInPaise}
+              muted={isOut}
+            />
+          </div>
           {isOut ? (
             <span className="rounded bg-surface-variant px-space-xs py-0.5 font-label-badge text-[10px] font-semibold text-on-surface-variant uppercase">
               Restocking Soon

@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import type { Product, ProductImage } from "@prisma/client";
 import { slugify } from "@/lib/utils";
+import {
+  getDiscountPercent,
+  paiseToRupeesInput,
+  rupeesToPaise,
+} from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/input";
@@ -25,7 +30,8 @@ export function ProductForm({ product }: ProductFormProps) {
   const [form, setForm] = useState({
     name: product?.name ?? "",
     slug: product?.slug ?? "",
-    priceInPaise: product ? (product.priceInPaise / 100).toString() : "",
+    priceInPaise: paiseToRupeesInput(product?.priceInPaise),
+    compareAtPriceInPaise: paiseToRupeesInput(product?.compareAtPriceInPaise),
     fabric: product?.fabric ?? "",
     description: product?.description ?? "",
     stock: product?.stock?.toString() ?? "1",
@@ -84,9 +90,23 @@ export function ProductForm({ product }: ProductFormProps) {
     setLoading(true);
 
     try {
+      const priceInPaise = rupeesToPaise(form.priceInPaise);
+      if (priceInPaise == null) {
+        throw new Error("Enter a valid current price");
+      }
+
+      const compareAtPriceInPaise = rupeesToPaise(form.compareAtPriceInPaise);
+      if (
+        form.compareAtPriceInPaise.trim() &&
+        (compareAtPriceInPaise == null || compareAtPriceInPaise <= priceInPaise)
+      ) {
+        throw new Error("Original price must be higher than the current price");
+      }
+
       const payload = {
         ...form,
-        priceInPaise: Math.round(parseFloat(form.priceInPaise) * 100),
+        priceInPaise,
+        compareAtPriceInPaise,
         stock: parseInt(form.stock, 10),
         images,
       };
@@ -134,6 +154,13 @@ export function ProductForm({ product }: ProductFormProps) {
     }
   }
 
+  const currentPricePaise = rupeesToPaise(form.priceInPaise);
+  const originalPricePaise = rupeesToPaise(form.compareAtPriceInPaise);
+  const discountPercent =
+    currentPricePaise != null
+      ? getDiscountPercent(originalPricePaise, currentPricePaise)
+      : null;
+
   return (
     <form onSubmit={handleSubmit} className="mt-8 max-w-xl space-y-4">
       <div>
@@ -154,18 +181,40 @@ export function ProductForm({ product }: ProductFormProps) {
           onChange={(e) => setForm({ ...form, slug: e.target.value })}
         />
       </div>
-      <div>
-        <Label htmlFor="price">Price (₹)</Label>
-        <Input
-          id="price"
-          type="number"
-          required
-          min="0"
-          step="1"
-          value={form.priceInPaise}
-          onChange={(e) => setForm({ ...form, priceInPaise: e.target.value })}
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="price">Current price (₹)</Label>
+          <Input
+            id="price"
+            type="number"
+            required
+            min="0"
+            step="1"
+            value={form.priceInPaise}
+            onChange={(e) => setForm({ ...form, priceInPaise: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label htmlFor="compareAtPrice">Original price (₹)</Label>
+          <Input
+            id="compareAtPrice"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="Optional"
+            value={form.compareAtPriceInPaise}
+            onChange={(e) =>
+              setForm({ ...form, compareAtPriceInPaise: e.target.value })
+            }
+          />
+        </div>
       </div>
+      {discountPercent != null ? (
+        <p className="text-sm text-muted">
+          Discount{" "}
+          <span className="font-semibold text-foreground">{discountPercent}%</span>
+        </p>
+      ) : null}
       <div>
         <Label htmlFor="fabric">Fabric</Label>
         <Input

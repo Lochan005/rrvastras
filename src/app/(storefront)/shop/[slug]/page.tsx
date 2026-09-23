@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { formatINR, getSiteUrl } from "@/lib/utils";
+import { getSiteUrl } from "@/lib/utils";
+import {
+  PRODUCT_SHIPPING_COPY,
+  PRODUCT_SHIPPING_DURATION,
+  SALE_RETURN_NOTE,
+} from "@/lib/pricing";
 import { ProductGallery } from "@/components/storefront/product-gallery";
+import { ProductPrice } from "@/components/storefront/product-price";
 import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
 import { WishlistButton } from "@/components/storefront/wishlist-button";
 import { Badge } from "@/components/ui/badge";
@@ -90,10 +96,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground leading-tight">
                 {product.name}
               </h1>
-              <p className="text-3xl font-medium text-foreground">
-                {formatINR(product.priceInPaise)}
-                <span className="text-sm text-muted font-normal ml-2">Inclusive of all taxes</span>
-              </p>
+              <div>
+                <ProductPrice
+                  priceInPaise={product.priceInPaise}
+                  compareAtPriceInPaise={product.compareAtPriceInPaise}
+                  size="detail"
+                />
+                <p className="mt-1 text-sm text-muted">
+                  Inclusive of all taxes · Ships in {PRODUCT_SHIPPING_DURATION}
+                </p>
+              </div>
             </div>
 
             <div className="h-px w-full bg-border my-8" />
@@ -104,11 +116,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <p>{product.description}</p>
                 </div>
               )}
+              <p className="text-sm font-medium leading-relaxed text-on-surface">
+                {SALE_RETURN_NOTE}
+              </p>
 
               <ul className="space-y-3 text-sm text-foreground">
                 <li className="flex items-start gap-2">
                   <span className="font-semibold w-24 shrink-0">Fabric:</span>
                   <span>{product.fabric}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold w-24 shrink-0">Shipping:</span>
+                  <span>{PRODUCT_SHIPPING_DURATION}</span>
                 </li>
               </ul>
             </div>
@@ -140,11 +159,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-gold">✦</span>
-                  Delivery within 5-7 business days
+                  {PRODUCT_SHIPPING_COPY}
                 </li>
                 <li className="flex gap-3">
                   <span className="text-gold">✦</span>
-                  48-hour return window for unused items
+                  {SALE_RETURN_NOTE}
                 </li>
               </ul>
             </div>
