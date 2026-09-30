@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Camera, Share2 } from "lucide-react";
 import { BrandMark } from "./brand-mark";
 import { ExchangeReturnPolicyDialog } from "./exchange-return-policy-dialog";
+import { TermsDialog } from "./terms-dialog";
 import { getStoreSettings } from "@/lib/store";
 import { getWhatsAppUrl } from "@/lib/utils";
 
@@ -124,7 +125,10 @@ export async function Footer() {
           <div className="flex items-center gap-space-md">
             <span>Privacy Policy</span>
             <span>·</span>
-            <span>Terms of Service</span>
+            <TermsDialog
+              triggerLabel="Terms of Service"
+              triggerClassName="text-surface-variant/60 no-underline transition-colors hover:text-tertiary-fixed"
+            />
             <span>·</span>
             <span>Cards &amp; UPI via Cashfree</span>
           </div>

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toaster";
 import { ExchangeReturnPolicyDialog } from "@/components/storefront/exchange-return-policy-dialog";
+import { TermsDialog } from "@/components/storefront/terms-dialog";
 
 interface Address {
   id: string;
@@ -381,6 +382,8 @@ export default function CheckoutPage() {
             </Button>
             <p className="mt-4 text-center text-xs text-muted">
               By paying, you agree to our{" "}
+              <TermsDialog triggerClassName="text-xs font-medium text-primary" />
+              {" "}and{" "}
               <ExchangeReturnPolicyDialog triggerClassName="text-xs font-medium text-primary" />
               .
             </p>
