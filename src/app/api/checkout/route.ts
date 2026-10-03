@@ -2,9 +2,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import {
   createCashfreeOrder,
-  buildCashfreeReturnUrl,
-  buildCashfreeNotifyUrl,
+  getCashfreeCheckoutMode,
   isCashfreeConfigured,
+  normalizeIndianPhone,
 } from "@/lib/cashfree";
 import { calculateShipping, getStoreSettings } from "@/lib/store";
 import { generateOrderNumber } from "@/lib/utils";
@@ -68,6 +68,14 @@ export async function POST(request: Request) {
     });
   }
 
+  const customerPhone = normalizeIndianPhone(address.phone);
+  if (isCashfreeConfigured() && !customerPhone) {
+    return NextResponse.json(
+      { error: "Enter a valid 10-digit Indian mobile number on the delivery address" },
+      { status: 400 }
+    );
+  }
+
   const settings = await getStoreSettings();
   const shippingInPaise = calculateShipping(subtotalInPaise, settings);
   const totalInPaise = subtotalInPaise + shippingInPaise;
@@ -114,17 +122,11 @@ export async function POST(request: Request) {
   try {
     const cashfreeOrder = await createCashfreeOrder({
       orderId: order.id,
-      orderAmount: totalInPaise / 100,
-      orderCurrency: "INR",
-      customerDetails: {
-        customerId: session.user.id,
-        customerEmail: session.user.email ?? "",
-        customerPhone: address.phone,
-      },
-      orderMeta: {
-        returnUrl: buildCashfreeReturnUrl(order.id),
-        notifyUrl: buildCashfreeNotifyUrl(),
-      },
+      orderAmount: Number((totalInPaise / 100).toFixed(2)),
+      customerId: session.user.id,
+      customerName: address.name,
+      customerEmail: session.user.email ?? "",
+      customerPhone: customerPhone!,
     });
 
     await prisma.order.update({
@@ -135,8 +137,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       orderId: order.id,
       paymentSessionId: cashfreeOrder.payment_session_id,
-      cashfreeMode:
-        process.env.CASHFREE_ENV === "production" ? "production" : "sandbox",
+      cashfreeMode: getCashfreeCheckoutMode(),
     });
   } catch (err) {
     await prisma.order.delete({ where: { id: order.id } });

@@ -30,6 +30,55 @@ interface ShippingInfo {
   totalInPaise: number;
 }
 
+interface CashfreeCheckoutResult {
+  error?: unknown;
+  redirect?: boolean;
+  paymentDetails?: unknown;
+}
+
+type CashfreeCheckout = {
+  checkout: (opts: {
+    paymentSessionId: string;
+    redirectTarget: "_self" | "_modal" | "_top" | "_blank";
+  }) => Promise<CashfreeCheckoutResult>;
+};
+
+function loadCashfreeCheckout(): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+  if (window.Cashfree) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>("script[data-cashfree-sdk]");
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Could not load Cashfree checkout")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+    script.dataset.cashfreeSdk = "true";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Could not load Cashfree checkout"));
+    document.body.appendChild(script);
+  });
+}
+
+let cashfreeClient: CashfreeCheckout | null = null;
+
+function initCashfree(mode: "sandbox" | "production"): CashfreeCheckout {
+  if (!cashfreeClient) {
+    cashfreeClient = window.Cashfree({ mode });
+  }
+  return cashfreeClient;
+}
+
+declare global {
+  interface Window {
+    Cashfree: (opts: { mode: "sandbox" | "production" }) => CashfreeCheckout;
+  }
+}
+
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const { items, clearCart } = useCart();
@@ -67,6 +116,16 @@ export default function CheckoutPage() {
         });
     }
   }, [session]);
+
+  useEffect(() => {
+    const mode =
+      process.env.NEXT_PUBLIC_CASHFREE_ENV === "production" ? "production" : "sandbox";
+    loadCashfreeCheckout()
+      .then(() => initCashfree(mode))
+      .catch(() => {
+        // Checkout can still fall back to the mock path when keys are unset.
+      });
+  }, []);
 
   useEffect(() => {
     if (items.length > 0) {
@@ -126,24 +185,30 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
-      clearCart();
-
       if (data.paymentSessionId && data.cashfreeMode !== "mock") {
-        const script = document.createElement("script");
-        script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
-        script.onload = () => {
-          const cashfree = (window as unknown as { Cashfree: (opts: { mode: string }) => { checkout: (opts: { paymentSessionId: string; redirectTarget: string }) => void } }).Cashfree({
-            mode: data.cashfreeMode,
+        await loadCashfreeCheckout();
+        const cashfree = initCashfree(data.cashfreeMode);
+        const result = await cashfree.checkout({
+          paymentSessionId: data.paymentSessionId,
+          redirectTarget: "_self",
+        });
+        if (result.error) {
+          toast({
+            title: "Payment was not completed",
+            description: "You can try again from checkout.",
           });
-          cashfree.checkout({
-            paymentSessionId: data.paymentSessionId,
-            redirectTarget: "_self",
-          });
-        };
-        document.body.appendChild(script);
-      } else {
-        router.push(`/orders/${data.orderId}?payment=success`);
+          return;
+        }
+        clearCart();
+        if (result.redirect) return;
+        if (result.paymentDetails) {
+          router.push(`/checkout/return?order_id=${data.orderId}`);
+        }
+        return;
       }
+
+      clearCart();
+      router.push(`/orders/${data.orderId}?payment=success`);
     } catch (err) {
       toast({
         title: "Checkout failed",

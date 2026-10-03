@@ -1,18 +1,15 @@
+import { createHmac, timingSafeEqual } from "crypto";
 import { getSiteUrl } from "@/lib/utils";
 
-interface CashfreeOrderPayload {
+const API_VERSION = "2025-01-01";
+
+export interface CreateCashfreeOrderInput {
   orderId: string;
   orderAmount: number;
-  orderCurrency: string;
-  customerDetails: {
-    customerId: string;
-    customerEmail: string;
-    customerPhone: string;
-  };
-  orderMeta: {
-    returnUrl: string;
-    notifyUrl: string;
-  };
+  customerId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
 }
 
 function getCashfreeBaseUrl(): string {
@@ -26,15 +23,53 @@ function getCashfreeHeaders(): HeadersInit {
     "Content-Type": "application/json",
     "x-client-id": process.env.CASHFREE_APP_ID!,
     "x-client-secret": process.env.CASHFREE_SECRET_KEY!,
-    "x-api-version": "2023-08-01",
+    "x-api-version": API_VERSION,
   };
 }
 
-export async function createCashfreeOrder(payload: CashfreeOrderPayload) {
+export function isCashfreeConfigured(): boolean {
+  return Boolean(process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET_KEY);
+}
+
+export function getCashfreeCheckoutMode(): "sandbox" | "production" {
+  return process.env.CASHFREE_ENV === "production" ? "production" : "sandbox";
+}
+
+/** Cashfree requires a 10-digit Indian mobile number. */
+export function normalizeIndianPhone(phone: string): string | null {
+  const digits = phone.replace(/\D/g, "");
+  const local = digits.length > 10 ? digits.slice(-10) : digits;
+  return /^[6-9]\d{9}$/.test(local) ? local : null;
+}
+
+export function buildCashfreeReturnUrl(): string {
+  return `${getSiteUrl()}/checkout/return`;
+}
+
+export function buildCashfreeNotifyUrl(): string {
+  return `${getSiteUrl()}/api/webhooks/cashfree`;
+}
+
+export async function createCashfreeOrder(input: CreateCashfreeOrderInput) {
   const response = await fetch(`${getCashfreeBaseUrl()}/orders`, {
     method: "POST",
     headers: getCashfreeHeaders(),
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      order_id: input.orderId,
+      order_amount: input.orderAmount,
+      order_currency: "INR",
+      customer_details: {
+        customer_id: input.customerId,
+        customer_name: input.customerName,
+        customer_email: input.customerEmail,
+        customer_phone: input.customerPhone,
+      },
+      order_meta: {
+        return_url: buildCashfreeReturnUrl(),
+        notify_url: buildCashfreeNotifyUrl(),
+        payment_methods: "cc,dc,upi,nb",
+      },
+    }),
   });
 
   if (!response.ok) {
@@ -45,6 +80,7 @@ export async function createCashfreeOrder(payload: CashfreeOrderPayload) {
   return response.json() as Promise<{
     order_id: string;
     payment_session_id: string;
+    order_status: string;
   }>;
 }
 
@@ -66,16 +102,19 @@ export async function verifyCashfreeOrder(orderId: string) {
   }>;
 }
 
-export function buildCashfreeReturnUrl(orderId: string): string {
-  return `${getSiteUrl()}/orders/${orderId}?payment=return`;
-}
+export function verifyCashfreeWebhookSignature(
+  timestamp: string | null,
+  rawBody: string,
+  signature: string | null
+): boolean {
+  const secret = process.env.CASHFREE_SECRET_KEY;
+  if (!secret || !timestamp || !signature) return false;
 
-export function buildCashfreeNotifyUrl(): string {
-  return `${getSiteUrl()}/api/webhooks/cashfree`;
-}
-
-export function isCashfreeConfigured(): boolean {
-  return Boolean(
-    process.env.CASHFREE_APP_ID && process.env.CASHFREE_SECRET_KEY
-  );
+  const computed = createHmac("sha256", secret)
+    .update(timestamp + rawBody)
+    .digest("base64");
+  const expected = Buffer.from(computed);
+  const received = Buffer.from(signature);
+  if (expected.length !== received.length) return false;
+  return timingSafeEqual(expected, received);
 }

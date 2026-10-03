@@ -31,7 +31,8 @@ export default async function OrderPage({
     notFound();
   }
 
-  const isSuccess = payment === "success" || payment === "return";
+  const isSuccess = payment === "success";
+  const isPending = payment === "pending" && order.status === "pending_payment";
   const status = ORDER_STATUS_COPY[order.status] ?? {
     label: order.status.replace("_", " "),
   };
@@ -63,6 +64,15 @@ export default async function OrderPage({
           <p className="font-headline-sm text-headline-sm text-primary">Payment successful!</p>
           <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
             Thank you for your order. We&apos;ll ship it soon.
+          </p>
+        </div>
+      )}
+
+      {isPending && (
+        <div className="mb-space-lg rounded-xl bg-surface-container px-space-lg py-space-md text-center">
+          <p className="font-headline-sm text-headline-sm text-on-surface">Payment not completed</p>
+          <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            This order is waiting for payment. You can try again from checkout.
           </p>
         </div>
       )}
