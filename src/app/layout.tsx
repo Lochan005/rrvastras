@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { EB_Garamond, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
@@ -21,9 +22,9 @@ const garamond = EB_Garamond({
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const plusJakarta = localFont({
+  src: "./fonts/PlusJakartaSans-latin.woff2",
+  weight: "500 700",
   variable: "--font-plus-jakarta",
   display: "swap",
 });
