@@ -8,7 +8,6 @@ import {
   Heart,
   LogOut,
   Menu,
-  Search,
   ShoppingBag,
   User,
   X,
@@ -17,6 +16,7 @@ import { useCart } from "@/components/providers/cart-provider";
 import { usePathname } from "next/navigation";
 import { AnnouncementBar } from "./announcement-bar";
 import { BrandMark } from "./brand-mark";
+import { HeaderSearch } from "./header-search";
 
 const navLinks = [
   { href: "/", label: "Home", match: "exact" as const },
@@ -90,13 +90,7 @@ export function Header() {
           </nav>
 
           <div className="flex flex-1 items-center justify-end gap-space-md">
-            <Link
-              href="/shop"
-              aria-label="Search"
-              className="hidden p-space-2xs text-on-surface-variant transition-colors hover:text-primary lg:inline-flex"
-            >
-              <Search className="h-5 w-5" />
-            </Link>
+            <HeaderSearch />
             <Link
               href="/account/wishlist"
               aria-label="Wishlist"
