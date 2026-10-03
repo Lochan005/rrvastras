@@ -68,6 +68,9 @@ let cashfreeClient: CashfreeCheckout | null = null;
 
 function initCashfree(mode: "sandbox" | "production"): CashfreeCheckout {
   if (!cashfreeClient) {
+    if (!window.Cashfree) {
+      throw new Error("Could not load Cashfree checkout");
+    }
     cashfreeClient = window.Cashfree({ mode });
   }
   return cashfreeClient;
@@ -75,7 +78,7 @@ function initCashfree(mode: "sandbox" | "production"): CashfreeCheckout {
 
 declare global {
   interface Window {
-    Cashfree: (opts: { mode: "sandbox" | "production" }) => CashfreeCheckout;
+    Cashfree?: (opts: { mode: "sandbox" | "production" }) => CashfreeCheckout;
   }
 }
 
