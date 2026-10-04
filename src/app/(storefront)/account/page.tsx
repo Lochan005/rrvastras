@@ -385,9 +385,9 @@ export default async function AccountPage() {
                               </div>
                               <div className="space-y-1">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  {item.product?.fabric && (
+                                  {item.product?.productCode && (
                                     <span className="font-label-eyebrow text-label-eyebrow tracking-widest text-secondary uppercase">
-                                      {item.product.fabric}
+                                      {item.product.productCode}
                                     </span>
                                   )}
                                 </div>

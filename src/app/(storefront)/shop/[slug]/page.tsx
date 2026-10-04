@@ -36,7 +36,7 @@ export async function generateMetadata({
   const image = product.images[0];
   return {
     title: product.name,
-    description: product.description || `${product.name} — ${product.fabric} saree at RR Vastras`,
+    description: product.description || `${product.name} — ${product.productCode} at RR Vastras`,
     openGraph: {
       title: product.name,
       description: product.description,
@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex flex-col gap-4 mb-6">
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium uppercase tracking-wider text-muted">
-                  {product.fabric}
+                  {product.productCode}
                 </span>
                 {isOut && (
                   <Badge variant="destructive">Out of stock</Badge>
@@ -117,17 +117,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <p>{product.description}</p>
                 </div>
               )}
-              <div className="space-y-2">
-                <p className="text-sm font-medium leading-relaxed text-on-surface">
-                  {SALE_RETURN_NOTE}
-                </p>
-                <ExchangeReturnPolicyDialog triggerClassName="text-sm font-medium text-primary" />
-              </div>
-
               <ul className="space-y-3 text-sm text-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="font-semibold w-24 shrink-0">Fabric:</span>
-                  <span>{product.fabric}</span>
+                  <span className="font-semibold w-28 shrink-0">Product Code:</span>
+                  <span>{product.productCode}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-semibold w-24 shrink-0">Shipping:</span>
@@ -171,6 +164,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {SALE_RETURN_NOTE}{" "}
                     <ExchangeReturnPolicyDialog triggerClassName="text-sm font-medium text-primary" />
                   </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-gold">✦</span>
+                  Blouse piece included
                 </li>
               </ul>
             </div>

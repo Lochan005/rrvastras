@@ -7,7 +7,7 @@ const placeholderProducts = [
     name: "Black Soft Silk Butta Saree",
     slug: "black-soft-silk-butta-saree",
     priceInPaise: 390000,
-    fabric: "Soft Silk",
+    productCode: "Soft Silk",
     description:
       "The elegant black soft silk butta saree features a rich zari border and pallu that gives a classy look. A rich looking soft silk saree perfect for weddings, festivals and special occasions.",
     stock: 1,
@@ -25,7 +25,7 @@ const placeholderProducts = [
     name: "Elegant Silk Saree",
     slug: "elegant-silk-saree",
     priceInPaise: 899900,
-    fabric: "Pure Silk",
+    productCode: "Pure Silk",
     description:
       "A timeless silk saree with intricate weaving. Perfect for festive occasions and celebrations.",
     stock: 1,
@@ -43,7 +43,7 @@ const placeholderProducts = [
     name: "Banarasi Weave Saree",
     slug: "banarasi-weave-saree",
     priceInPaise: 1249900,
-    fabric: "Banarasi Silk",
+    productCode: "Banarasi Silk",
     description:
       "Handwoven Banarasi saree featuring traditional motifs and a luxurious drape.",
     stock: 1,
@@ -61,7 +61,7 @@ const placeholderProducts = [
     name: "Cotton Handloom Saree",
     slug: "cotton-handloom-saree",
     priceInPaise: 349900,
-    fabric: "Cotton",
+    productCode: "Cotton",
     description:
       "Lightweight handloom cotton saree ideal for daily wear and casual gatherings.",
     stock: 1,
@@ -79,7 +79,7 @@ const placeholderProducts = [
     name: "Kanjivaram Classic",
     slug: "kanjivaram-classic",
     priceInPaise: 1599900,
-    fabric: "Kanjivaram Silk",
+    productCode: "Kanjivaram Silk",
     description:
       "Classic Kanjivaram saree with contrasting border and temple-inspired motifs.",
     stock: 1,
@@ -97,7 +97,7 @@ const placeholderProducts = [
     name: "Chiffon Evening Saree",
     slug: "chiffon-evening-saree",
     priceInPaise: 599900,
-    fabric: "Chiffon",
+    productCode: "Chiffon",
     description:
       "Flowing chiffon saree with delicate embellishments for evening events.",
     stock: 1,
@@ -115,7 +115,7 @@ const placeholderProducts = [
     name: "Linen Summer Saree",
     slug: "linen-summer-saree",
     priceInPaise: 429900,
-    fabric: "Linen",
+    productCode: "Linen",
     description:
       "Breathable linen saree with a modern minimalist appeal for warm weather.",
     stock: 1,
@@ -133,7 +133,7 @@ const placeholderProducts = [
     name: "Georgette Party Wear",
     slug: "georgette-party-wear",
     priceInPaise: 749900,
-    fabric: "Georgette",
+    productCode: "Georgette",
     description:
       "Stylish georgette saree with sequin details, perfect for parties and receptions.",
     stock: 1,
@@ -151,7 +151,7 @@ const placeholderProducts = [
     name: "Tussar Silk Heritage",
     slug: "tussar-silk-heritage",
     priceInPaise: 999900,
-    fabric: "Tussar Silk",
+    productCode: "Tussar Silk",
     description:
       "Heritage tussar silk saree with natural texture and earthy elegance.",
     stock: 1,
@@ -169,7 +169,7 @@ const placeholderProducts = [
     name: "Organza Festive Saree",
     slug: "organza-festive-saree",
     priceInPaise: 849900,
-    fabric: "Organza",
+    productCode: "Organza",
     description:
       "Sheer organza saree with floral embroidery for festive celebrations.",
     stock: 1,
@@ -187,7 +187,7 @@ const placeholderProducts = [
     name: "Placeholder Saree (Draft)",
     slug: "placeholder-saree-draft",
     priceInPaise: 500000,
-    fabric: "TBD",
+    productCode: "TBD",
     description: "Placeholder product — details to be updated by admin.",
     stock: 1,
     blouseIncluded: true,

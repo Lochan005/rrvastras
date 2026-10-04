@@ -30,10 +30,10 @@ export const metadata: Metadata = {
 const PAGE_SIZE = 9;
 
 const CATEGORY_PILLS = [
-  { label: "All Sarees", fabric: undefined as string | undefined },
-  { label: "Silk Sarees", fabric: "silk" },
-  { label: "Cotton Collections", fabric: "cotton" },
-  { label: "Handloom Weaves", fabric: "handloom" },
+  { label: "All Sarees", productCode: undefined as string | undefined },
+  { label: "Silk Sarees", productCode: "silk" },
+  { label: "Cotton Collections", productCode: "cotton" },
+  { label: "Handloom Weaves", productCode: "handloom" },
 ];
 
 const PRICE_LABELS: Record<string, string> = {
@@ -44,6 +44,8 @@ const PRICE_LABELS: Record<string, string> = {
 
 interface ShopPageProps {
   searchParams: Promise<{
+    productCode?: string;
+    /** @deprecated use productCode */
     fabric?: string;
     sort?: string;
     inStock?: string;
@@ -61,13 +63,14 @@ function priceWhere(price?: string): Prisma.IntFilter | undefined {
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
+  const productCodeFilter = params.productCode ?? params.fabric;
   const settings = await getStoreSettings();
   const page = Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1);
 
   const where: Prisma.ProductWhereInput = { isPublished: true };
 
-  if (params.fabric) {
-    where.fabric = { contains: params.fabric, mode: "insensitive" };
+  if (productCodeFilter) {
+    where.productCode = { contains: productCodeFilter, mode: "insensitive" };
   }
   if (params.inStock === "true") {
     where.stock = { gt: 0 };
@@ -92,18 +95,21 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     }),
     prisma.product.findMany({
       where: { isPublished: true },
-      select: { fabric: true, stock: true },
+      select: { productCode: true, stock: true },
     }),
     prisma.product.count({
       where: { isPublished: true, stock: { gt: 0 } },
     }),
   ]);
 
-  const fabricCounts = new Map<string, number>();
+  const productCodeCounts = new Map<string, number>();
   for (const p of published) {
-    fabricCounts.set(p.fabric, (fabricCounts.get(p.fabric) ?? 0) + 1);
+    productCodeCounts.set(
+      p.productCode,
+      (productCodeCounts.get(p.productCode) ?? 0) + 1
+    );
   }
-  const fabrics = [...fabricCounts.entries()].map(([name, count]) => ({
+  const productCodes = [...productCodeCounts.entries()].map(([name, count]) => ({
     name,
     count,
   }));
@@ -111,8 +117,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
 
-  const breadcrumbLabel = params.fabric
-    ? `${params.fabric} sarees`
+  const breadcrumbLabel = productCodeFilter
+    ? `${productCodeFilter} sarees`
     : "All Sarees";
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
@@ -122,7 +128,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
   const rest = (omit: string) => {
     const q = new URLSearchParams();
-    if (params.fabric && omit !== "fabric") q.set("fabric", params.fabric);
+    if (productCodeFilter && omit !== "productCode") {
+      q.set("productCode", productCodeFilter);
+    }
     if (params.sort && omit !== "sort") q.set("sort", params.sort);
     if (params.inStock === "true" && omit !== "inStock") q.set("inStock", "true");
     if (params.price && omit !== "price") q.set("price", params.price);
@@ -131,11 +139,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   };
 
   const activeFilters: { key: string; label: string; href: string }[] = [];
-  if (params.fabric) {
+  if (productCodeFilter) {
     activeFilters.push({
-      key: "fabric",
-      label: params.fabric,
-      href: rest("fabric"),
+      key: "productCode",
+      label: productCodeFilter,
+      href: rest("productCode"),
     });
   }
   if (params.price && PRICE_LABELS[params.price]) {
@@ -154,7 +162,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   }
 
   const baseParams = {
-    fabric: params.fabric,
+    productCode: productCodeFilter,
     sort: params.sort,
     inStock: params.inStock,
     price: params.price,
@@ -211,13 +219,17 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
             <div className="flex items-center gap-space-sm overflow-x-auto pt-space-sm pb-space-2xs">
               {CATEGORY_PILLS.map((pill) => {
-                const selected = pill.fabric
-                  ? params.fabric?.toLowerCase() === pill.fabric
-                  : !params.fabric;
+                const selected = pill.productCode
+                  ? productCodeFilter?.toLowerCase() === pill.productCode
+                  : !productCodeFilter;
                 return (
                   <Link
                     key={pill.label}
-                    href={pill.fabric ? `/shop?fabric=${pill.fabric}` : "/shop"}
+                    href={
+                      pill.productCode
+                        ? `/shop?productCode=${pill.productCode}`
+                        : "/shop"
+                    }
                     className={cn(
                       "whitespace-nowrap rounded px-space-md py-space-xs font-label-button text-label-button uppercase transition-colors",
                       selected
@@ -237,10 +249,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           <div className="flex flex-col items-start gap-space-2xl lg:flex-row">
             <Suspense fallback={<div className="w-full shrink-0 lg:w-[270px]" />}>
               <ShopFilters
-                fabrics={fabrics}
+                productCodes={productCodes}
                 totalCount={published.length}
                 inStockCount={inStockCount}
-                currentFabric={params.fabric}
+                currentProductCode={productCodeFilter}
                 currentSort={params.sort}
                 currentPrice={params.price}
                 inStockOnly={params.inStock === "true"}

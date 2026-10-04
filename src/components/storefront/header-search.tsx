@@ -145,8 +145,8 @@ export function HeaderSearch() {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Search by saree name or fabric"
-                  aria-label="Search by saree name or fabric"
+                  placeholder="Search by saree name or product code"
+                  aria-label="Search by saree name or product code"
                   aria-autocomplete="list"
                   aria-controls="header-search-results"
                   autoComplete="off"
@@ -203,7 +203,7 @@ export function HeaderSearch() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-semibold text-on-surface">{item.name}</p>
-                        <p className="text-xs tracking-wide text-outline uppercase">{item.fabric}</p>
+                        <p className="text-xs tracking-wide text-outline uppercase">{item.productCode}</p>
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="text-sm font-semibold text-on-surface">
@@ -221,7 +221,7 @@ export function HeaderSearch() {
 
             {(showEmpty || notFound) && (
               <p className="mt-space-sm text-sm text-on-surface-variant">
-                No sarees match &ldquo;{trimmed}&rdquo;. Try another name or fabric.
+                No sarees match &ldquo;{trimmed}&rdquo;. Try another name or product code.
               </p>
             )}
           </div>

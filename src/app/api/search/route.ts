@@ -7,15 +7,15 @@ const MAX_RESULTS = 8;
 export interface ProductSearchResult {
   slug: string;
   name: string;
-  fabric: string;
+  productCode: string;
   priceInPaise: number;
   imageUrl: string | null;
   inStock: boolean;
 }
 
-function rank(name: string, fabric: string, query: string): number {
+function rank(name: string, productCode: string, query: string): number {
   const n = name.toLowerCase();
-  const f = fabric.toLowerCase();
+  const f = productCode.toLowerCase();
   if (n === query) return 0;
   if (n.startsWith(query)) return 1;
   if (n.includes(query)) return 2;
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     AND: terms.map((term) => ({
       OR: [
         { name: { contains: term, mode: "insensitive" } },
-        { fabric: { contains: term, mode: "insensitive" } },
+        { productCode: { contains: term, mode: "insensitive" } },
       ],
     })),
   };
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     select: {
       slug: true,
       name: true,
-      fabric: true,
+      productCode: true,
       priceInPaise: true,
       stock: true,
       images: { orderBy: { sortOrder: "asc" }, take: 1, select: { url: true } },
@@ -59,14 +59,14 @@ export async function GET(request: Request) {
   const results: ProductSearchResult[] = products
     .sort(
       (a, b) =>
-        rank(a.name, a.fabric, query) - rank(b.name, b.fabric, query) ||
+        rank(a.name, a.productCode, query) - rank(b.name, b.productCode, query) ||
         a.name.localeCompare(b.name)
     )
     .slice(0, MAX_RESULTS)
     .map((p) => ({
       slug: p.slug,
       name: p.name,
-      fabric: p.fabric,
+      productCode: p.productCode,
       priceInPaise: p.priceInPaise,
       imageUrl: p.images[0]?.url ?? null,
       inStock: p.stock > 0,

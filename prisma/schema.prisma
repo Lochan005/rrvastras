@@ -91,7 +91,7 @@ model Product {
   slug                  String         @unique
   priceInPaise          Int
   compareAtPriceInPaise Int?
-  fabric                String
+  productCode           String
   description           String         @default("")
   stock                 Int            @default(1)
   blouseIncluded        Boolean        @default(true)

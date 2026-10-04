@@ -14,7 +14,7 @@ const CATEGORIES = [
   {
     title: "Silk Sarees",
     subtitle: "Banarasi, Kanjivaram, Tussar",
-    href: "/shop?fabric=silk",
+    href: "/shop?productCode=silk",
     cta: "Explore Silk",
     image: "/category-silk.jpg",
     alt: "Woman wearing a maroon and gold silk Banarasi saree",
@@ -23,7 +23,7 @@ const CATEGORIES = [
   {
     title: "Cotton Collections",
     subtitle: "Mulmul, Chanderi, Kota Doria",
-    href: "/shop?fabric=cotton",
+    href: "/shop?productCode=cotton",
     cta: "Explore Cotton",
     image: "/category-cotton.jpg",
     alt: "Woman wearing a light pink floral cotton saree",
@@ -32,7 +32,7 @@ const CATEGORIES = [
   {
     title: "Handloom Weaves",
     subtitle: "Ikat, Jamdani, Maheshwari",
-    href: "/shop?fabric=handloom",
+    href: "/shop?productCode=handloom",
     cta: "Explore Handloom",
     image: "/category-handloom.jpg",
     alt: "Red terracotta Ikat or Patola-style handloom saree draped on a wooden table with gold zari border",
@@ -81,7 +81,7 @@ export default async function HomePage() {
             <div className="mb-space-md inline-flex items-center gap-space-xs rounded-full bg-surface-container-lowest/10 px-space-sm py-1 shadow-sm backdrop-blur-md">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-tertiary-fixed" />
               <span className="font-label-eyebrow text-[10px] tracking-[0.2em] text-tertiary-fixed uppercase">
-                Pure Mulberry &amp; Chanderi Weaves
+                Pure Banaras, Viscose, Assam Silk and many more
               </span>
             </div>
             <p className="mb-space-xs font-label-eyebrow text-label-eyebrow font-semibold tracking-[0.24em] text-tertiary-fixed uppercase">
@@ -91,7 +91,7 @@ export default async function HomePage() {
               Shop Your Vibe
             </h1>
             <p className="mb-space-xl max-w-xl font-body-lg text-body-lg leading-relaxed font-light text-surface-variant/90">
-              Sarees chosen with care — for celebrations, quiet days, and the life in between.
+              Handpicked sarees chosen with care — for celebrations, quiet days, and the life in between.
             </p>
             <div className="flex flex-wrap items-center gap-space-md">
               <Link

@@ -21,7 +21,7 @@ import { HeaderSearch } from "./header-search";
 const navLinks = [
   { href: "/", label: "Home", match: "exact" as const },
   { href: "/shop", label: "Shop", match: "prefix" as const },
-  { href: "/shop?fabric=silk", label: "Fabrics", match: "none" as const },
+  { href: "/shop?productCode=silk", label: "Fabrics", match: "none" as const },
   { href: "/shop", label: "Occasions", match: "none" as const },
   { href: "/about", label: "About", match: "prefix" as const },
 ];

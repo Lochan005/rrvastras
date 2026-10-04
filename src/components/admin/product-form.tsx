@@ -32,7 +32,7 @@ export function ProductForm({ product }: ProductFormProps) {
     slug: product?.slug ?? "",
     priceInPaise: paiseToRupeesInput(product?.priceInPaise),
     compareAtPriceInPaise: paiseToRupeesInput(product?.compareAtPriceInPaise),
-    fabric: product?.fabric ?? "",
+    productCode: product?.productCode ?? "",
     description: product?.description ?? "",
     stock: product?.stock?.toString() ?? "1",
     blouseIncluded: product?.blouseIncluded ?? true,
@@ -216,12 +216,12 @@ export function ProductForm({ product }: ProductFormProps) {
         </p>
       ) : null}
       <div>
-        <Label htmlFor="fabric">Fabric</Label>
+        <Label htmlFor="productCode">Product Code</Label>
         <Input
-          id="fabric"
+          id="productCode"
           required
-          value={form.fabric}
-          onChange={(e) => setForm({ ...form, fabric: e.target.value })}
+          value={form.productCode}
+          onChange={(e) => setForm({ ...form, productCode: e.target.value })}
         />
       </div>
       <div>

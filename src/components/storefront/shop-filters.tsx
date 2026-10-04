@@ -6,10 +6,10 @@ import { Diamond, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ShopFiltersProps {
-  fabrics: { name: string; count: number }[];
+  productCodes: { name: string; count: number }[];
   totalCount: number;
   inStockCount: number;
-  currentFabric?: string;
+  currentProductCode?: string;
   currentSort?: string;
   currentPrice?: string;
   inStockOnly?: boolean;
@@ -32,10 +32,10 @@ function buildShopUrl(
 }
 
 export function ShopFilters({
-  fabrics,
+  productCodes,
   totalCount,
   inStockCount,
-  currentFabric,
+  currentProductCode,
   currentSort,
   currentPrice,
   inStockOnly,
@@ -95,10 +95,10 @@ export function ShopFilters({
       <div className="flex flex-col gap-space-sm">
         <div className="flex items-center justify-between">
           <span className="font-label-eyebrow text-label-eyebrow tracking-wider text-outline uppercase">
-            Fabric Base
+            Product Code
           </span>
           <span className="font-label-badge text-label-badge text-on-surface-variant">
-            {fabrics.length} Type{fabrics.length === 1 ? "" : "s"}
+            {productCodes.length} Code{productCodes.length === 1 ? "" : "s"}
           </span>
         </div>
         <div className="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface">
@@ -106,16 +106,16 @@ export function ShopFilters({
             <span className="flex items-center gap-space-xs">
               <input
                 type="radio"
-                name="fabric_choice"
-                checked={!currentFabric}
-                onChange={() => updateFilter("fabric", null)}
+                name="product_code_choice"
+                checked={!currentProductCode}
+                onChange={() => updateFilter("productCode", null)}
                 className="h-4 w-4 cursor-pointer accent-primary"
               />
-              <span>All Fabrics</span>
+              <span>All codes</span>
             </span>
             <span className="text-xs text-outline">{totalCount}</span>
           </label>
-          {fabrics.map((f) => (
+          {productCodes.map((f) => (
             <label
               key={f.name}
               className="flex cursor-pointer items-center justify-between rounded p-space-xs hover:bg-surface"
@@ -123,9 +123,9 @@ export function ShopFilters({
               <span className="flex items-center gap-space-xs">
                 <input
                   type="radio"
-                  name="fabric_choice"
-                  checked={currentFabric === f.name}
-                  onChange={() => updateFilter("fabric", f.name)}
+                  name="product_code_choice"
+                  checked={currentProductCode === f.name}
+                  onChange={() => updateFilter("productCode", f.name)}
                   className="h-4 w-4 cursor-pointer accent-primary"
                 />
                 <span>{f.name}</span>

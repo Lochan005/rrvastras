@@ -71,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </span>
             )}
             <span className="rounded bg-surface-bright/90 px-space-xs py-0.5 font-label-badge text-[10px] font-semibold tracking-wide text-secondary uppercase backdrop-blur-xs">
-              {product.fabric}
+              {product.productCode}
             </span>
           </div>
         )}
@@ -85,7 +85,7 @@ export function ProductCard({ product }: ProductCardProps) {
       >
         <div>
           <span className="font-label-eyebrow text-label-eyebrow tracking-widest text-outline uppercase">
-            {product.fabric}
+            {product.productCode}
           </span>
           <h3
             className={cn(

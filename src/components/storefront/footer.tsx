@@ -50,17 +50,17 @@ export async function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/shop?fabric=silk" className="transition-colors hover:text-tertiary-fixed">
+                <Link href="/shop?productCode=silk" className="transition-colors hover:text-tertiary-fixed">
                   Silk Sarees
                 </Link>
               </li>
               <li>
-                <Link href="/shop?fabric=cotton" className="transition-colors hover:text-tertiary-fixed">
+                <Link href="/shop?productCode=cotton" className="transition-colors hover:text-tertiary-fixed">
                   Cotton Sarees
                 </Link>
               </li>
               <li>
-                <Link href="/shop?fabric=handloom" className="transition-colors hover:text-tertiary-fixed">
+                <Link href="/shop?productCode=handloom" className="transition-colors hover:text-tertiary-fixed">
                   Handloom Collection
                 </Link>
               </li>
