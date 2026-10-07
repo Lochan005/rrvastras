@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getStoreSettings } from "@/lib/store";
 import { getWhatsAppUrl } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { StorefrontContainer } from "@/components/storefront/ui/storefront-container";
+import { PageHeader } from "@/components/storefront/ui/page-header";
+import { StorefrontLinkButton } from "@/components/storefront/ui/storefront-button";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -17,60 +18,47 @@ export default async function ContactPage() {
   );
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-4">Contact Us</h1>
-        <div className="h-1 w-20 bg-gold mx-auto" />
-        <p className="mt-6 text-lg text-muted max-w-2xl mx-auto">
-          Have a question about an order, a saree, or shipping? We&apos;d love to
-          hear from you.
-        </p>
-      </div>
+    <StorefrontContainer width="reading" className="py-space-3xl lg:py-space-4xl">
+      <PageHeader
+        title="Contact us"
+        align="center"
+        description="Have a question about an order, a saree, or shipping? We'd love to hear from you."
+      />
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="rounded-sm border border-border bg-background p-8 shadow-sm">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-serif font-semibold">WhatsApp</h2>
-          </div>
-          <p className="text-muted mb-6 leading-relaxed">
+      <div className="grid gap-space-lg md:grid-cols-2">
+        <div className="rounded border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm">
+          <h2 className="font-headline-sm text-headline-sm text-primary">WhatsApp</h2>
+          <p className="mt-space-sm font-body-md text-body-md leading-relaxed text-on-surface-variant">
             The fastest way to reach us. Tap below to start a chat with our support team.
           </p>
-          <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
-            <Button className="w-full">Chat on WhatsApp</Button>
-          </Link>
+          <StorefrontLinkButton
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-space-lg w-full sm:w-auto"
+          >
+            Chat on WhatsApp
+          </StorefrontLinkButton>
         </div>
 
-        <div className="rounded-sm border border-border bg-background p-8 shadow-sm">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-serif font-semibold">Order Support</h2>
-          </div>
-          <p className="text-muted mb-6 leading-relaxed">
-            For order tracking and delivery updates, sign in to your account to
-            view order history.
+        <div className="rounded border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm">
+          <h2 className="font-headline-sm text-headline-sm text-primary">Order support</h2>
+          <p className="mt-space-sm font-body-md text-body-md leading-relaxed text-on-surface-variant">
+            For order tracking and delivery updates, sign in to your account to view order history.
           </p>
-          <Link href="/account" className="block">
-            <Button variant="outline" className="w-full">Go to Account</Button>
-          </Link>
+          <StorefrontLinkButton href="/account" variant="outline" className="mt-space-lg w-full sm:w-auto">
+            Go to account
+          </StorefrontLinkButton>
         </div>
 
-        <div className="md:col-span-2 rounded-sm border border-border bg-accent/30 p-8 text-center">
-          <h2 className="text-xl font-serif font-semibold mb-4">Shipping Information</h2>
-          <p className="text-muted max-w-2xl mx-auto">
-            We ship across India. A flat ₹150 delivery charge applies to standard orders. 
-            Enjoy <span className="font-semibold text-foreground">free shipping</span> on all orders above ₹5,000.
+        <div className="rounded border border-outline-variant/40 bg-surface-container p-space-lg text-center md:col-span-2">
+          <h2 className="font-headline-sm text-headline-sm text-primary">Shipping information</h2>
+          <p className="mx-auto mt-space-sm max-w-form font-body-md text-body-md text-on-surface-variant">
+            We ship across India. A flat ₹150 delivery charge applies to standard orders.
+            Enjoy <span className="font-semibold text-on-surface">free shipping</span> on all orders above ₹5,000.
           </p>
         </div>
       </div>
-    </div>
+    </StorefrontContainer>
   );
 }

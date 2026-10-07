@@ -28,7 +28,8 @@ cp .env.example .env.local
 ```
 
 Required variables:
-- `DATABASE_URL` — Neon PostgreSQL connection string
+- `DATABASE_URL` — Neon **pooled** connection string (`*-pooler.*` host, include `pgbouncer=true`)
+- `DIRECT_URL` — Neon **direct** connection string (same credentials, non-pooler host; for `db:push` / migrations)
 - `AUTH_SECRET` — random secret (`openssl rand -base64 32`)
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — Google OAuth credentials
 - `ADMIN_EMAIL` — Google account that receives admin role

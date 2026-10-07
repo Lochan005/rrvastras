@@ -11,6 +11,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toaster";
 import { ExchangeReturnPolicyDialog } from "@/components/storefront/exchange-return-policy-dialog";
 import { TermsDialog } from "@/components/storefront/terms-dialog";
+import { StorefrontContainer } from "@/components/storefront/ui/storefront-container";
+import { PageHeader } from "@/components/storefront/ui/page-header";
+import {
+  StorefrontEmptyState,
+  StorefrontSkeleton,
+} from "@/components/storefront/ui/storefront-states";
 
 interface Address {
   id: string;
@@ -84,7 +90,7 @@ declare global {
 
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
-  const { items, clearCart } = useCart();
+  const { items, clearCart, hydrated } = useCart();
   const router = useRouter();
   const { toast } = useToast();
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -223,31 +229,38 @@ export default function CheckoutPage() {
     }
   }
 
-  if (status === "loading" || items.length === 0) {
+  if (status === "loading" || !hydrated) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        {items.length === 0 ? (
-          <>
-            <h1 className="text-3xl font-serif font-bold text-foreground mb-4">Your Bag is Empty</h1>
-            <p className="text-muted mb-8">Add items to your bag to proceed to checkout.</p>
-            <Button size="lg" onClick={() => router.push("/shop")}>
-              Shop Now
-            </Button>
-          </>
-        ) : (
-          <p className="text-muted">Loading checkout...</p>
-        )}
-      </div>
+      <StorefrontContainer className="py-space-4xl">
+        <StorefrontSkeleton className="mb-space-lg h-10 w-48" />
+        <div className="grid gap-space-xl lg:grid-cols-12">
+          <StorefrontSkeleton className="h-96 lg:col-span-7" />
+          <StorefrontSkeleton className="h-72 lg:col-span-5" />
+        </div>
+      </StorefrontContainer>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <StorefrontContainer className="py-space-4xl">
+        <StorefrontEmptyState
+          title="Your bag is empty"
+          description="Add items to your bag to proceed to checkout."
+          actionLabel="Shop now"
+          actionHref="/shop"
+        />
+      </StorefrontContainer>
     );
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-serif font-bold text-foreground mb-8">Checkout</h1>
+    <StorefrontContainer className="py-space-2xl lg:py-space-3xl">
+      <PageHeader title="Checkout" />
 
       <div className="grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-7">
-          <h2 className="text-xl font-serif font-semibold mb-6">Delivery Address</h2>
+          <h2 className="mb-space-lg font-headline-md text-headline-md text-primary">Delivery address</h2>
 
           {addresses.length > 0 && (
             <div className="space-y-4 mb-6">
@@ -401,8 +414,8 @@ export default function CheckoutPage() {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="sticky top-24 bg-accent/30 p-6 rounded-sm border border-border">
-            <h2 className="text-xl font-serif font-semibold mb-6">Order Summary</h2>
+          <div className="sticky-below-header rounded border border-outline-variant/40 bg-surface-container-low p-space-lg">
+            <h2 className="mb-space-lg font-headline-md text-headline-md text-primary">Order summary</h2>
             <div className="space-y-4 mb-6">
               {items.map((item) => (
                 <div
@@ -448,6 +461,11 @@ export default function CheckoutPage() {
             >
               {loading ? "Processing..." : "Pay with Cashfree"}
             </Button>
+            {!selectedAddressId ? (
+              <p className="mt-space-sm text-center font-body-sm text-body-sm text-on-surface-variant">
+                Select a delivery address to continue.
+              </p>
+            ) : null}
             <p className="mt-4 text-center text-xs text-muted">
               By paying, you agree to our{" "}
               <TermsDialog triggerClassName="text-xs font-medium text-primary" />
@@ -464,6 +482,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-    </div>
+    </StorefrontContainer>
   );
 }

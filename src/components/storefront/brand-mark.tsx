@@ -13,11 +13,13 @@ export function BrandMark({
       <Image
         src="/logo.png"
         alt="RR Vastras"
-        width={512}
-        height={512}
+        width={1024}
+        height={341}
         className={cn(
-          "rounded-sm object-cover",
-          compact ? "h-20 w-20" : "h-11 w-11 lg:h-14 lg:w-14"
+          "h-auto w-auto object-contain",
+          compact
+            ? "max-h-[5.76rem] lg:max-h-24"
+            : "max-h-[3.6rem] lg:max-h-[3.6rem]"
         )}
         priority
       />

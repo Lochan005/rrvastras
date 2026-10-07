@@ -11,14 +11,12 @@ export default function StorefrontLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="min-h-[calc(100vh-320px)] w-full bg-surface pt-[92px] lg:pt-[104px]">
-        {children}
-      </main>
+      <main className="w-full flex-1 bg-surface">{children}</main>
       <Footer />
       <WhatsAppButton />
       <Toaster />
-    </>
+    </div>
   );
 }

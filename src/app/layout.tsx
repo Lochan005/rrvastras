@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Manrope } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/components/providers/auth-provider";
@@ -15,10 +15,10 @@ const manrope = Manrope({
   display: "swap",
 });
 
-const garamond = EB_Garamond({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-eb-garamond",
+  variable: "--font-cormorant",
   display: "swap",
 });
 
@@ -63,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${garamond.variable} ${plusJakarta.variable}`}
+      className={`${manrope.variable} ${cormorant.variable} ${plusJakarta.variable}`}
     >
       <body className="min-h-screen bg-surface font-body-md text-body-md text-on-surface antialiased">
         <AuthProvider>

@@ -4,20 +4,40 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/providers/cart-provider";
 import { formatINR } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { StorefrontContainer } from "@/components/storefront/ui/storefront-container";
+import { PageHeader } from "@/components/storefront/ui/page-header";
+import { StorefrontEmptyState, StorefrontSkeleton } from "@/components/storefront/ui/storefront-states";
+import { StorefrontLinkButton } from "@/components/storefront/ui/storefront-button";
 
 export default function CartPage() {
-  const { items, removeItem, count } = useCart();
+  const { items, removeItem, count, hydrated } = useCart();
+
+  if (!hydrated) {
+    return (
+      <StorefrontContainer className="py-space-2xl">
+        <StorefrontSkeleton className="mb-space-lg h-10 w-72" />
+        <div className="grid gap-space-xl lg:grid-cols-3">
+          <div className="space-y-space-md lg:col-span-2">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <StorefrontSkeleton key={i} className="h-36 w-full" />
+            ))}
+          </div>
+          <StorefrontSkeleton className="h-64 w-full" />
+        </div>
+      </StorefrontContainer>
+    );
+  }
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="text-3xl font-serif font-bold text-foreground">Your Shopping Bag</h1>
-        <p className="mt-4 text-muted">Your bag is currently empty.</p>
-        <Link href="/shop" className="mt-8 inline-block">
-          <Button size="lg" className="uppercase tracking-wider">Continue Shopping</Button>
-        </Link>
-      </div>
+      <StorefrontContainer className="py-space-4xl">
+        <StorefrontEmptyState
+          title="Your shopping bag is empty"
+          description="Add sarees you love — they will stay here until you checkout."
+          actionLabel="Continue shopping"
+          actionHref="/shop"
+        />
+      </StorefrontContainer>
     );
   }
 
@@ -27,93 +47,93 @@ export default function CartPage() {
   );
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-serif font-bold text-foreground mb-8">Your Bag ({count} items)</h1>
+    <StorefrontContainer className="py-space-2xl lg:py-space-3xl">
+      <PageHeader title={`Your bag (${count} item${count === 1 ? "" : "s"})`} />
 
-      <div className="grid lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid gap-space-2xl lg:grid-cols-12">
+        <div className="space-y-space-lg lg:col-span-7">
           {items.map((item) => (
-            <div
+            <article
               key={item.productId}
-              className="flex gap-6 border-b border-border pb-6"
+              className="flex gap-space-md border-b border-outline-variant/40 pb-space-lg sm:gap-space-lg"
             >
               <Link
                 href={`/shop/${item.slug}`}
-                className="relative h-32 w-24 shrink-0 overflow-hidden rounded-sm bg-accent"
+                className="relative aspect-[3/4] w-24 shrink-0 overflow-hidden rounded bg-surface-container sm:w-28"
               >
                 {item.imageUrl ? (
                   <Image
                     src={item.imageUrl}
                     alt={item.imageAlt}
                     fill
+                    sizes="112px"
                     className="object-cover"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-xs text-muted">
-                    No img
+                  <div className="flex h-full items-center justify-center p-2 text-center font-body-sm text-body-sm text-on-surface-variant">
+                    No image
                   </div>
                 )}
               </Link>
-              <div className="flex flex-1 flex-col justify-between">
-                <div className="flex justify-between items-start gap-4">
-                  <div>
+              <div className="flex min-w-0 flex-1 flex-col justify-between gap-space-sm">
+                <div className="flex items-start justify-between gap-space-md">
+                  <div className="min-w-0">
                     <Link
                       href={`/shop/${item.slug}`}
-                      className="font-serif font-semibold text-lg hover:text-primary transition-colors line-clamp-1"
+                      className="line-clamp-2 font-headline-sm text-headline-sm text-on-surface transition-colors hover:text-primary"
                     >
                       {item.name}
                     </Link>
-                    <p className="text-sm text-muted mt-1">
-                      {formatINR(item.priceInPaise)} each
+                    <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                      {formatINR(item.priceInPaise)} each · Qty {item.quantity}
                     </p>
                   </div>
-                  <p className="font-semibold text-foreground">
+                  <p className="shrink-0 font-price-md text-price-md text-on-surface">
                     {formatINR(item.priceInPaise * item.quantity)}
                   </p>
                 </div>
-                <div className="flex items-center justify-between mt-4">
-                  <button
-                    className="text-sm text-muted hover:text-destructive transition-colors underline underline-offset-4"
-                    onClick={() => removeItem(item.productId)}
-                  >
-                    Remove
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="self-start font-body-sm text-body-sm text-on-surface-variant underline-offset-4 hover:text-error hover:underline"
+                  onClick={() => removeItem(item.productId)}
+                >
+                  Remove
+                </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 
-        <div className="lg:col-span-1">
-          <div className="bg-accent/30 p-6 rounded-sm border border-border sticky top-24">
-            <h2 className="text-lg font-serif font-semibold mb-4">Order Summary</h2>
-            <div className="space-y-3 text-sm text-muted mb-6">
-              <div className="flex justify-between">
+        <div className="lg:col-span-5">
+          <div className="sticky-below-header rounded border border-outline-variant/40 bg-surface-container-low p-space-lg">
+            <h2 className="mb-space-md font-headline-md text-headline-md text-primary">
+              Order summary
+            </h2>
+            <div className="space-y-space-sm font-body-sm text-body-sm text-on-surface-variant">
+              <div className="flex justify-between gap-space-md">
                 <span>Subtotal</span>
-                <span className="text-foreground">{formatINR(subtotal)}</span>
+                <span className="font-medium text-on-surface">{formatINR(subtotal)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-space-md">
                 <span>Shipping</span>
-                <span>Calculated at checkout</span>
+                <span className="text-right">Calculated at checkout</span>
               </div>
             </div>
-            
-            <div className="border-t border-border pt-4 mb-6">
-              <div className="flex justify-between text-lg font-semibold text-foreground">
+            <div className="mt-space-md border-t border-outline-variant/40 pt-space-md">
+              <div className="flex justify-between font-price-lg text-price-lg text-on-surface">
                 <span>Total</span>
                 <span>{formatINR(subtotal)}</span>
               </div>
-              <p className="text-xs text-muted mt-1">Inclusive of all taxes</p>
+              <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                Inclusive of all taxes
+              </p>
             </div>
-            
-            <Link href="/checkout" className="block w-full">
-              <Button className="w-full uppercase tracking-wider font-semibold" size="lg">
-                Proceed to Checkout
-              </Button>
-            </Link>
+            <StorefrontLinkButton href="/checkout" className="mt-space-lg w-full">
+              Proceed to checkout
+            </StorefrontLinkButton>
           </div>
         </div>
       </div>
-    </div>
+    </StorefrontContainer>
   );
 }

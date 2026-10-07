@@ -60,12 +60,12 @@
   --color-destructive: #b42336;
 
   --font-sans: var(--font-manrope), system-ui, sans-serif;
-  --font-serif: var(--font-eb-garamond), Georgia, serif;
-  --font-display-hero: var(--font-eb-garamond), Georgia, serif;
-  --font-headline-xl: var(--font-eb-garamond), Georgia, serif;
-  --font-headline-lg: var(--font-eb-garamond), Georgia, serif;
-  --font-headline-md: var(--font-eb-garamond), Georgia, serif;
-  --font-headline-sm: var(--font-eb-garamond), Georgia, serif;
+  --font-serif: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
+  --font-display-hero: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
+  --font-headline-xl: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
+  --font-headline-lg: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
+  --font-headline-md: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
+  --font-headline-sm: var(--font-cormorant, Georgia), Georgia, "Times New Roman", serif;
   --font-body-md: var(--font-manrope), system-ui, sans-serif;
   --font-body-lg: var(--font-manrope), system-ui, sans-serif;
   --font-body-sm: var(--font-manrope), system-ui, sans-serif;
@@ -141,6 +141,20 @@
   --spacing-gutter-mobile: 1rem;
   --spacing-gutter-desktop: 2rem;
 
+  --width-content: 85rem;
+  --width-narrow: 32.5rem;
+  --width-form: 47.5rem;
+  --width-reading: 60rem;
+
+  --color-hero-bg: #3a010e;
+  --color-cta-gold: #e8dcc4;
+  --color-cta-gold-hover: #ddd0b4;
+
+  --spacing-icon-sm: 1.125rem;
+  --spacing-icon-md: 1.625rem;
+
+  --site-header-height: 5.75rem;
+
   --radius: 0.125rem;
   --radius-lg: 0.25rem;
   --radius-xl: 0.5rem;
@@ -151,6 +165,61 @@ body {
   background: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-body-md);
+}
+
+@utility font-display-hero {
+  font-family: var(--font-display-hero);
+}
+
+@utility max-w-content {
+  max-width: var(--width-content);
+}
+
+@utility max-w-narrow {
+  max-width: var(--width-narrow);
+}
+
+@utility max-w-form {
+  max-width: var(--width-form);
+}
+
+@utility max-w-reading {
+  max-width: var(--width-reading);
+}
+
+@utility bg-hero-bg {
+  background-color: var(--color-hero-bg);
+}
+
+@utility from-hero-bg {
+  --tw-gradient-from: var(--color-hero-bg);
+}
+
+@utility via-hero-bg {
+  --tw-gradient-via: var(--color-hero-bg);
+}
+
+@utility bg-cta-gold {
+  background-color: var(--color-cta-gold);
+}
+
+@utility size-icon-sm {
+  width: var(--spacing-icon-sm);
+  height: var(--spacing-icon-sm);
+}
+
+@utility size-icon-md {
+  width: var(--spacing-icon-md);
+  height: var(--spacing-icon-md);
+}
+
+@utility top-site-header {
+  top: var(--site-header-height);
+}
+
+@utility sticky-below-header {
+  position: sticky;
+  top: calc(var(--site-header-height) + var(--spacing-space-md));
 }
 
 h1,

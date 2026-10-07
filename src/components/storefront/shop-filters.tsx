@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Diamond, SlidersHorizontal } from "lucide-react";
+import { Diamond, SlidersHorizontal, X } from "lucide-react";
+import { Drawer } from "vaul";
 import { cn } from "@/lib/utils";
 
 interface ShopFiltersProps {
@@ -49,7 +50,7 @@ export function ShopFilters({
   }
 
   const sidebar = (
-    <aside className="flex w-full flex-shrink-0 flex-col gap-space-lg rounded bg-surface-container-low p-space-lg shadow-sm lg:sticky lg:top-[120px] lg:w-[270px]">
+    <aside className="flex w-full flex-shrink-0 flex-col gap-space-lg rounded bg-surface-container-low p-space-lg shadow-sm lg:sticky lg:sticky-below-header lg:w-[270px]">
       <div className="flex items-center justify-between pb-space-xs">
         <div className="flex items-center gap-space-xs">
           <SlidersHorizontal className="h-5 w-5 text-primary" />
@@ -202,12 +203,32 @@ export function ShopFilters({
       <button
         type="button"
         className="mb-space-md inline-flex items-center gap-space-xs rounded bg-primary px-space-md py-space-sm font-label-button text-label-button tracking-wider text-on-primary uppercase lg:hidden"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(true)}
       >
         <SlidersHorizontal className="h-4 w-4" />
-        {open ? "Hide filters" : "Refine By"}
+        Refine By
       </button>
-      <div className={cn(open ? "block" : "hidden", "lg:block")}>{sidebar}</div>
+      <div className="hidden lg:block">{sidebar}</div>
+      <Drawer.Root open={open} onOpenChange={setOpen}>
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm lg:hidden" />
+          <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mt-24 flex max-h-[85vh] flex-col rounded-t-xl bg-surface-container-lowest outline-none lg:hidden">
+            <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-outline-variant/60" />
+            <div className="flex items-center justify-between border-b border-outline-variant/40 px-gutter-mobile py-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">Refine By</span>
+              <button
+                type="button"
+                aria-label="Close filters"
+                className="p-space-2xs text-on-surface-variant"
+                onClick={() => setOpen(false)}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-gutter-mobile pb-space-xl">{sidebar}</div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
     </>
   );
 }

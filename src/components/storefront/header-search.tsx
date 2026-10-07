@@ -133,9 +133,9 @@ export function HeaderSearch() {
 
       {open && (
         <div
-          className="fixed top-[92px] right-0 left-0 z-40 border-b border-outline-variant/40 bg-surface-container-lowest shadow-lg lg:top-[104px]"
+          className="fixed top-site-header right-0 left-0 z-40 border-b border-outline-variant/40 bg-surface-container-lowest shadow-lg"
         >
-          <div className="mx-auto max-w-[760px] px-gutter-mobile py-space-md lg:px-gutter-desktop">
+          <div className="mx-auto max-w-form px-gutter-mobile py-space-md lg:px-gutter-desktop">
             <form onSubmit={handleSubmit} role="search" className="flex items-center gap-space-sm">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-outline" />

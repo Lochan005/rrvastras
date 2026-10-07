@@ -15,7 +15,7 @@ export async function Footer() {
 
   return (
     <footer className="w-full border-t border-tertiary-fixed-dim/40 bg-primary text-surface-container-lowest">
-      <div className="mx-auto max-w-[1360px] px-gutter-mobile py-space-3xl lg:px-gutter-desktop">
+      <div className="mx-auto max-w-content px-gutter-mobile py-space-3xl lg:px-gutter-desktop">
         <div className="grid grid-cols-1 gap-space-2xl md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-space-md">
             <BrandMark compact />

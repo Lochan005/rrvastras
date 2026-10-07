@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { getStoreSettings } from "@/lib/store";
 import { ProductCard } from "@/components/storefront/product-card";
 import { ShopFilters } from "@/components/storefront/shop-filters";
 import { ShopPagination } from "@/components/storefront/shop-pagination";
+import { ProductGrid } from "@/components/storefront/ui/product-grid";
 import { getSiteUrl, cn } from "@/lib/utils";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
 
@@ -64,7 +64,6 @@ function priceWhere(price?: string): Prisma.IntFilter | undefined {
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
   const productCodeFilter = params.productCode ?? params.fabric;
-  const settings = await getStoreSettings();
   const page = Math.max(1, Number.parseInt(params.page ?? "1", 10) || 1);
 
   const where: Prisma.ProductWhereInput = { isPublished: true };
@@ -180,7 +179,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           <div className="pointer-events-none absolute -top-20 -right-20 h-96 w-96 rounded-full bg-secondary-fixed-dim/20 blur-3xl" />
           <div className="pointer-events-none absolute bottom-0 left-1/3 h-32 w-80 bg-tertiary-fixed/30 blur-2xl" />
 
-          <div className="relative z-10 mx-auto flex max-w-[1360px] flex-col gap-space-md">
+          <div className="relative z-10 mx-auto flex max-w-content flex-col gap-space-md">
             <nav
               aria-label="Breadcrumb"
               className="flex items-center gap-space-xs font-label-eyebrow text-label-eyebrow tracking-widest text-on-surface-variant uppercase"
@@ -245,7 +244,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-[1360px] px-gutter-mobile py-space-2xl lg:px-gutter-desktop">
+        <div className="mx-auto w-full max-w-content px-gutter-mobile py-space-2xl lg:px-gutter-desktop">
           <div className="flex flex-col items-start gap-space-2xl lg:flex-row">
             <Suspense fallback={<div className="w-full shrink-0 lg:w-[270px]" />}>
               <ShopFilters
@@ -303,14 +302,14 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                   </Link>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-space-lg sm:grid-cols-2 xl:grid-cols-3">
+                <ProductGrid>
                   {products.map((product) => (
                     <ProductCard
                       key={product.id}
                       product={product}
                     />
                   ))}
-                </div>
+                </ProductGrid>
               )}
 
               <ShopPagination
@@ -325,7 +324,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
 
         <section className="mt-space-3xl w-full bg-surface-container-lowest py-space-2xl">
-          <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-space-xl px-gutter-mobile md:grid-cols-3 lg:px-gutter-desktop">
+          <div className="mx-auto grid max-w-content grid-cols-1 gap-space-xl px-gutter-mobile md:grid-cols-3 lg:px-gutter-desktop">
             <div className="flex items-start gap-space-md">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-primary-fixed text-primary">
                 <Handshake className="h-[26px] w-[26px]" />

@@ -3,6 +3,7 @@ import { ChevronRight, Home } from "lucide-react";
 import { requireAuth } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { ProductCard } from "@/components/storefront/product-card";
+import { ProductGrid } from "@/components/storefront/ui/product-grid";
 
 export default async function WishlistPage() {
   const session = await requireAuth();
@@ -18,7 +19,7 @@ export default async function WishlistPage() {
   });
 
   return (
-    <div className="mx-auto w-full max-w-[1360px] px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
+    <div className="mx-auto w-full max-w-content px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
       <nav
         aria-label="Breadcrumb"
         className="flex items-center gap-space-xs pb-space-lg font-body-sm text-body-sm text-on-surface-variant"
@@ -58,14 +59,14 @@ export default async function WishlistPage() {
           </Link>
         </div>
       ) : (
-        <div className="mt-space-2xl grid grid-cols-1 gap-space-lg sm:grid-cols-2 xl:grid-cols-4">
+        <ProductGrid className="mt-space-2xl">
           {items.map((item) => (
             <ProductCard
               key={item.id}
               product={item.product}
             />
           ))}
-        </div>
+        </ProductGrid>
       )}
     </div>
   );

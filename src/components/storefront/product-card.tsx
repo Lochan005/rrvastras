@@ -89,7 +89,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </span>
           <h3
             className={cn(
-              "font-headline-sm text-headline-sm mt-0.5 truncate transition-colors",
+              "mt-0.5 line-clamp-2 font-headline-sm text-headline-sm transition-colors",
               isOut
                 ? "text-on-surface-variant"
                 : "text-on-surface group-hover:text-primary"

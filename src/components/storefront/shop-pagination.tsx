@@ -10,6 +10,20 @@ interface ShopPaginationProps {
   baseParams: Record<string, string | undefined>;
 }
 
+function pageNumbers(page: number, pageCount: number): (number | "ellipsis")[] {
+  if (pageCount <= 7) {
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+  }
+  const items: (number | "ellipsis")[] = [1];
+  const start = Math.max(2, page - 1);
+  const end = Math.min(pageCount - 1, page + 1);
+  if (start > 2) items.push("ellipsis");
+  for (let n = start; n <= end; n += 1) items.push(n);
+  if (end < pageCount - 1) items.push("ellipsis");
+  items.push(pageCount);
+  return items;
+}
+
 function hrefFor(page: number, baseParams: Record<string, string | undefined>) {
   const params = new URLSearchParams();
   Object.entries(baseParams).forEach(([key, value]) => {
@@ -29,7 +43,7 @@ export function ShopPagination({
 }: ShopPaginationProps) {
   if (total === 0) return null;
 
-  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+  const pages = pageNumbers(page, pageCount);
   const progress = Math.min(100, Math.round((page / pageCount) * 100));
 
   return (
@@ -60,20 +74,30 @@ export function ShopPagination({
               <ChevronLeft className="h-5 w-5" />
             </Link>
           )}
-          {pages.map((n) => (
-            <Link
-              key={n}
-              href={hrefFor(n, baseParams)}
-              className={cn(
-                "flex h-10 w-10 items-center justify-center rounded font-label-button text-label-button transition-colors",
-                n === page
-                  ? "bg-primary font-bold text-on-primary shadow-xs"
-                  : "bg-surface-container text-on-surface hover:bg-surface-container-highest"
-              )}
-            >
-              {n}
-            </Link>
-          ))}
+          {pages.map((n, index) =>
+            n === "ellipsis" ? (
+              <span
+                key={`ellipsis-${index}`}
+                className="flex h-10 min-w-10 items-center justify-center px-1 font-body-sm text-outline"
+                aria-hidden
+              >
+                …
+              </span>
+            ) : (
+              <Link
+                key={n}
+                href={hrefFor(n, baseParams)}
+                className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded font-label-button text-label-button transition-colors",
+                  n === page
+                    ? "bg-primary font-bold text-on-primary shadow-xs"
+                    : "bg-surface-container text-on-surface hover:bg-surface-container-highest"
+                )}
+              >
+                {n}
+              </Link>
+            )
+          )}
           {page >= pageCount ? (
             <span className="flex h-10 w-10 cursor-not-allowed items-center justify-center rounded bg-surface-container text-outline">
               <ChevronRight className="h-5 w-5" />

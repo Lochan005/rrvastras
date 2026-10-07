@@ -16,7 +16,7 @@ export default async function OrdersPage() {
   });
 
   return (
-    <div className="mx-auto w-full max-w-[1360px] px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
+    <div className="mx-auto w-full max-w-content px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
       <nav
         aria-label="Breadcrumb"
         className="flex items-center gap-space-xs pb-space-lg font-body-sm text-body-sm text-on-surface-variant"

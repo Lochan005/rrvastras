@@ -13,6 +13,8 @@ import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
 import { ExchangeReturnPolicyDialog } from "@/components/storefront/exchange-return-policy-dialog";
 import { WishlistButton } from "@/components/storefront/wishlist-button";
 import { Badge } from "@/components/ui/badge";
+import { StorefrontContainer } from "@/components/storefront/ui/storefront-container";
+import { PageHeader } from "@/components/storefront/ui/page-header";
 import {
   buildBreadcrumbJsonLd,
   buildProductJsonLd,
@@ -76,61 +78,63 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-2">
-          {/* Left: Images */}
-          <div className="sticky top-24 h-fit">
+      <StorefrontContainer className="py-space-2xl lg:py-space-3xl">
+        <PageHeader
+          breadcrumbs={[
+            { label: "Home", href: "/" },
+            { label: "Shop", href: "/shop" },
+            { label: product.name },
+          ]}
+          title={product.name}
+          className="mb-space-xl"
+        />
+        <div className="grid gap-space-2xl lg:grid-cols-2">
+          <div className="lg:sticky lg:sticky-below-header lg:h-fit">
             <ProductGallery images={product.images} />
           </div>
 
-          {/* Right: Details */}
-          <div className="flex flex-col pt-4">
-            <div className="flex flex-col gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium uppercase tracking-wider text-muted">
+          <div className="flex flex-col">
+            <div className="mb-space-lg flex flex-col gap-space-md">
+              <div className="flex flex-wrap items-center gap-space-sm">
+                <span className="font-label-eyebrow text-label-eyebrow tracking-wider text-outline uppercase">
                   {product.productCode}
                 </span>
-                {isOut && (
-                  <Badge variant="destructive">Out of stock</Badge>
-                )}
+                {isOut && <Badge variant="destructive">Out of stock</Badge>}
               </div>
-              <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground leading-tight">
-                {product.name}
-              </h1>
               <div>
                 <ProductPrice
                   priceInPaise={product.priceInPaise}
                   compareAtPriceInPaise={product.compareAtPriceInPaise}
                   size="detail"
                 />
-                <p className="mt-1 text-sm text-muted">
+                <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
                   Inclusive of all taxes · Ships in {PRODUCT_SHIPPING_DURATION}
                 </p>
               </div>
             </div>
 
-            <div className="h-px w-full bg-border my-8" />
+            <div className="my-space-lg h-px w-full bg-outline-variant/40" />
 
-            <div className="space-y-6">
+            <div className="space-y-space-md">
               {product.description && (
-                <div className="prose prose-sm text-muted leading-relaxed">
-                  <p>{product.description}</p>
-                </div>
+                <p className="max-w-reading font-body-md text-body-md leading-relaxed text-on-surface-variant">
+                  {product.description}
+                </p>
               )}
-              <ul className="space-y-3 text-sm text-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold w-28 shrink-0">Product Code:</span>
+              <ul className="space-y-space-sm font-body-sm text-body-sm text-on-surface">
+                <li className="flex flex-wrap items-start gap-x-2 gap-y-1">
+                  <span className="min-w-28 shrink-0 font-semibold">Product code</span>
                   <span>{product.productCode}</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold w-24 shrink-0">Shipping:</span>
+                <li className="flex flex-wrap items-start gap-x-2 gap-y-1">
+                  <span className="min-w-28 shrink-0 font-semibold">Shipping</span>
                   <span>{PRODUCT_SHIPPING_DURATION}</span>
                 </li>
               </ul>
             </div>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
+            <div className="mt-space-xl flex flex-col gap-space-md sm:flex-row">
+              <div className="min-w-0 flex-1">
                 <AddToCartButton
                   product={{
                     id: product.id,
@@ -146,26 +150,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
               <WishlistButton productId={product.id} />
             </div>
-            
-            <div className="mt-12 bg-accent/50 p-6 rounded-sm border border-border">
-              <h3 className="font-serif font-semibold text-lg mb-4">Delivery & Returns</h3>
-              <ul className="space-y-3 text-sm text-muted">
-                <li className="flex gap-3">
+
+            <div className="mt-space-2xl rounded border border-outline-variant/40 bg-surface-container-low p-space-lg">
+              <h3 className="mb-space-md font-headline-sm text-headline-sm text-primary">
+                Delivery &amp; returns
+              </h3>
+              <ul className="space-y-space-sm font-body-sm text-body-sm text-on-surface-variant">
+                <li className="flex gap-space-sm">
                   <span className="text-gold">✦</span>
                   Free shipping on orders above ₹5,000
                 </li>
-                <li className="flex gap-3">
+                <li className="flex gap-space-sm">
                   <span className="text-gold">✦</span>
                   {PRODUCT_SHIPPING_COPY}
                 </li>
-                <li className="flex gap-3">
+                <li className="flex flex-wrap gap-x-1 gap-y-1">
                   <span className="text-gold">✦</span>
                   <span>
                     {SALE_RETURN_NOTE}{" "}
-                    <ExchangeReturnPolicyDialog triggerClassName="text-sm font-medium text-primary" />
+                    <ExchangeReturnPolicyDialog triggerClassName="font-medium text-primary" />
                   </span>
                 </li>
-                <li className="flex gap-3">
+                <li className="flex gap-space-sm">
                   <span className="text-gold">✦</span>
                   Blouse piece included
                 </li>
@@ -173,7 +179,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
         </div>
-      </div>
+      </StorefrontContainer>
     </>
   );
 }

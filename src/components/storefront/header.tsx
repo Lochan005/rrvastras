@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import {
   ChevronRight,
@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation";
 import { AnnouncementBar } from "./announcement-bar";
 import { BrandMark } from "./brand-mark";
 import { HeaderSearch } from "./header-search";
+import { useSiteHeaderHeight } from "./ui/use-site-header-height";
 
 const navLinks = [
   { href: "/", label: "Home", match: "exact" as const },
@@ -33,6 +34,8 @@ export function Header() {
   const [accountOpen, setAccountOpen] = useState(false);
   const pathname = usePathname();
   const isAdmin = session?.user?.role === "admin";
+  const headerRef = useRef<HTMLDivElement>(null);
+  useSiteHeaderHeight(headerRef);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "unset";
@@ -46,10 +49,10 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <div className="fixed top-0 left-0 z-50 w-full">
+    <div ref={headerRef} className="sticky top-0 z-50 w-full">
       <AnnouncementBar />
       <header className="w-full border-b border-outline-variant/40 bg-surface-container-lowest/95 backdrop-blur-md">
-        <div className="mx-auto flex h-[60px] max-w-[1360px] items-center justify-between gap-space-lg px-gutter-mobile lg:h-[72px] lg:px-gutter-desktop">
+        <div className="mx-auto flex min-h-[60px] max-w-content items-center justify-between gap-space-lg px-gutter-mobile py-space-2xs lg:min-h-[72px] lg:px-gutter-desktop">
           <div className="flex flex-1 items-center lg:hidden">
             <button
               type="button"

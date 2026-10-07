@@ -11,6 +11,7 @@ import {
 
 interface CartContextValue {
   items: CartItem[];
+  hydrated: boolean;
   count: number;
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
   removeItem: (productId: string) => void;
@@ -76,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         items,
+        hydrated,
         count: getCartCount(items),
         addItem,
         removeItem,
