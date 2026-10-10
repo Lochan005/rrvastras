@@ -35,7 +35,7 @@ export async function generateMetadata({
 
   if (!product) return { title: "Product Not Found" };
 
-  const image = product.images[0];
+  const image = product.images.find((media) => media.mediaType !== "video");
   return {
     title: product.name,
     description: product.description || `${product.name} — ${product.productCode} at RR Vastras`,
@@ -61,6 +61,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product) notFound();
 
   const isOut = product.stock <= 0;
+  const primaryImage = product.images.find(
+    (media) => media.mediaType !== "video"
+  );
   const productJsonLd = buildProductJsonLd(product);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", url: getSiteUrl() },
@@ -142,8 +145,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     name: product.name,
                     priceInPaise: product.priceInPaise,
                     stock: product.stock,
-                    imageUrl: product.images[0]?.url ?? "",
-                    imageAlt: product.images[0]?.alt ?? product.name,
+                    imageUrl: primaryImage?.url ?? "",
+                    imageAlt: primaryImage?.alt ?? product.name,
                   }}
                   disabled={isOut}
                 />

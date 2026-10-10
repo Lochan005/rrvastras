@@ -76,9 +76,18 @@ export async function POST(request: Request) {
       isPublished: isPublished ?? false,
       images: {
         create: (images ?? []).map(
-          (img: { url: string; alt: string; sortOrder: number }, i: number) => ({
+          (
+            img: {
+              url: string;
+              alt: string;
+              mediaType?: "image" | "video";
+              sortOrder: number;
+            },
+            i: number
+          ) => ({
             url: img.url,
             alt: img.alt || name,
+            mediaType: img.mediaType === "video" ? "video" : "image",
             sortOrder: img.sortOrder ?? i,
           })
         ),

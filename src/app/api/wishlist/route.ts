@@ -12,7 +12,13 @@ export async function GET() {
     where: { userId: session.user.id },
     include: {
       product: {
-        include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
+        include: {
+          images: {
+            where: { mediaType: "image" },
+            orderBy: { sortOrder: "asc" },
+            take: 1,
+          },
+        },
       },
     },
     orderBy: { createdAt: "desc" },

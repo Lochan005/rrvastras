@@ -7,7 +7,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProductGalleryProps {
-  images: { url: string; alt: string }[];
+  images: {
+    url: string;
+    alt: string;
+    mediaType: string;
+  }[];
 }
 
 export function ProductGallery({ images }: ProductGalleryProps) {
@@ -42,14 +46,26 @@ export function ProductGallery({ images }: ProductGalleryProps) {
           {images.map((img, i) => (
             <div key={i} className="relative min-w-0 flex-[0_0_100%]">
               <div className="relative aspect-[3/4]">
-                <Image
-                  src={img.url}
-                  alt={img.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  priority={i === 0}
-                />
+                {img.mediaType === "video" ? (
+                  <video
+                    src={img.url}
+                    aria-label={img.alt}
+                    className="absolute inset-0 h-full w-full bg-black object-contain"
+                    controls
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                ) : (
+                  <Image
+                    src={img.url}
+                    alt={img.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    priority={i === 0}
+                  />
+                )}
               </div>
             </div>
           ))}
@@ -59,6 +75,8 @@ export function ProductGallery({ images }: ProductGalleryProps) {
             <Button
               variant="outline"
               size="icon"
+              type="button"
+              aria-label="Previous media"
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm border-none hover:bg-white text-foreground rounded-full h-10 w-10 shadow-sm"
               onClick={scrollPrev}
             >
@@ -67,6 +85,8 @@ export function ProductGallery({ images }: ProductGalleryProps) {
             <Button
               variant="outline"
               size="icon"
+              type="button"
+              aria-label="Next media"
               className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm border-none hover:bg-white text-foreground rounded-full h-10 w-10 shadow-sm"
               onClick={scrollNext}
             >
@@ -84,7 +104,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
                 i === selectedIndex ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-primary/50"
               }`}
               onClick={() => emblaApi?.scrollTo(i)}
-              aria-label={`Go to image ${i + 1}`}
+              aria-label={`Go to media ${i + 1}`}
             />
           ))}
         </div>

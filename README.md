@@ -28,7 +28,7 @@ cp .env.example .env.local
 ```
 
 Required variables:
-- `DATABASE_URL` — Neon **pooled** connection string (`*-pooler.*` host, include `pgbouncer=true`)
+- `DATABASE_URL` — Neon **pooled** connection string (`*-pooler.*` host; include `sslmode=require`, `pgbouncer=true`, and `connect_timeout=15` so a waking compute does not fail with Prisma P1001)
 - `DIRECT_URL` — Neon **direct** connection string (same credentials, non-pooler host; for `db:push` / migrations)
 - `AUTH_SECRET` — random secret (`openssl rand -base64 32`)
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — Google OAuth credentials

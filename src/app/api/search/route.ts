@@ -51,7 +51,12 @@ export async function GET(request: Request) {
       productCode: true,
       priceInPaise: true,
       stock: true,
-      images: { orderBy: { sortOrder: "asc" }, take: 1, select: { url: true } },
+      images: {
+        where: { mediaType: "image" },
+        orderBy: { sortOrder: "asc" },
+        take: 1,
+        select: { url: true },
+      },
     },
     take: 30,
   });

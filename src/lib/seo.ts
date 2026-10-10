@@ -4,7 +4,7 @@ import type { Product, ProductImage } from "@prisma/client";
 type ProductWithImages = Product & { images: ProductImage[] };
 
 export function buildProductJsonLd(product: ProductWithImages) {
-  const image = product.images[0];
+  const image = product.images.find((media) => media.mediaType !== "video");
   return {
     "@context": "https://schema.org",
     "@type": "Product",

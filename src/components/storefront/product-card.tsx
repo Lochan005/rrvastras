@@ -13,7 +13,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const image = product.images[0];
+  const image = product.images.find((media) => media.mediaType !== "video");
   const isOut = product.stock <= 0;
   const discountPercent = getDiscountPercent(
     product.compareAtPriceInPaise,

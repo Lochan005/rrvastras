@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import type { Product, ProductImage } from "@prisma/client";
+import { upload } from "@vercel/blob/client";
+import { Trash2 } from "lucide-react";
 import { slugify } from "@/lib/utils";
 import {
   getDiscountPercent,
@@ -17,6 +19,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toaster";
 
 type ProductWithImages = Product & { images: ProductImage[] };
+type ProductMedia = {
+  url: string;
+  alt: string;
+  mediaType: "image" | "video";
+  sortOrder: number;
+};
 
 interface ProductFormProps {
   product?: ProductWithImages;
@@ -38,12 +46,11 @@ export function ProductForm({ product }: ProductFormProps) {
     blouseIncluded: product?.blouseIncluded ?? true,
     isPublished: product?.isPublished ?? false,
   });
-  const [images, setImages] = useState<
-    { url: string; alt: string; sortOrder: number }[]
-  >(
+  const [images, setImages] = useState<ProductMedia[]>(
     product?.images.map((img, i) => ({
       url: img.url,
       alt: img.alt,
+      mediaType: img.mediaType === "video" ? "video" : "image",
       sortOrder: i,
     })) ?? []
   );
@@ -56,30 +63,48 @@ export function ProductForm({ product }: ProductFormProps) {
     }));
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleMediaUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const mediaType = file.type.startsWith("video/") ? "video" : "image";
+    const alt = `${form.name || "Saree"} ${mediaType}`;
+
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("alt", `${form.name || "Saree"} image`);
+      let url: string;
+      try {
+        const blob = await upload(`products/${Date.now()}-${file.name}`, file, {
+          access: "public",
+          handleUploadUrl: "/api/admin/upload",
+        });
+        url = blob.url;
+      } catch {
+        // Keep local development usable when Vercel Blob is not configured.
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("alt", alt);
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Upload failed");
+        url = data.url;
+      }
 
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Upload failed");
-      const data = await res.json();
       setImages((prev) => [
         ...prev,
-        { url: data.url, alt: data.alt, sortOrder: prev.length },
+        { url, alt, mediaType, sortOrder: prev.length },
       ]);
-      toast({ title: "Image uploaded" });
-    } catch {
-      toast({ title: "Upload failed", variant: "destructive" });
+      toast({ title: `${mediaType === "video" ? "Video" : "Image"} uploaded` });
+      e.target.value = "";
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: error instanceof Error ? error.message : undefined,
+        variant: "destructive",
+      });
     } finally {
       setUploading(false);
     }
@@ -271,21 +296,56 @@ export function ProductForm({ product }: ProductFormProps) {
       </div>
 
       <div>
-        <Label>Images</Label>
+        <Label>Product images and videos</Label>
+        <p className="mt-1 text-xs text-muted">
+          Upload JPG, PNG, WebP, GIF, MP4, WebM, or MOV files up to 50 MB.
+        </p>
         <div className="mt-2 flex flex-wrap gap-3">
-          {images.map((img, i) => (
-            <div key={i} className="relative h-24 w-20 overflow-hidden rounded-md">
-              <Image src={img.url} alt={img.alt} fill className="object-cover" />
+          {images.map((media, i) => (
+            <div
+              key={`${media.url}-${i}`}
+              className="group relative h-24 w-20 overflow-hidden rounded-md bg-accent"
+            >
+              {media.mediaType === "video" ? (
+                <video
+                  src={media.url}
+                  className="h-full w-full object-cover"
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Image
+                  src={media.url}
+                  alt={media.alt}
+                  fill
+                  className="object-cover"
+                />
+              )}
+              <button
+                type="button"
+                aria-label={`Remove ${media.mediaType}`}
+                className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
+                onClick={() =>
+                  setImages((items) =>
+                    items
+                      .filter((_, index) => index !== i)
+                      .map((item, index) => ({ ...item, sortOrder: index }))
+                  )
+                }
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
             </div>
           ))}
         </div>
         <Input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
           className="mt-2"
-          onChange={handleImageUpload}
+          onChange={handleMediaUpload}
           disabled={uploading}
         />
+        {uploading && <p className="mt-1 text-xs text-muted">Uploading…</p>}
       </div>
 
       <div className="flex gap-3 pt-4">
