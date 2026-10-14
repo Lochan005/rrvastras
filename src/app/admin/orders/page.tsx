@@ -16,6 +16,8 @@ export default async function AdminOrdersPage() {
     pending_payment: "warning",
     confirmed: "default",
     shipped: "success",
+    delivered: "success",
+    returned: "warning",
     cancelled: "destructive",
   };
 

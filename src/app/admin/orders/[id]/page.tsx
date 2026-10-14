@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ShipOrderForm } from "@/components/admin/ship-order-form";
+import { SHIPMENT_STATUS_COPY } from "@/lib/shipment-status";
 
 interface AdminOrderPageProps {
   params: Promise<{ id: string }>;
@@ -20,6 +21,11 @@ export default async function AdminOrderDetailPage({
     include: {
       items: true,
       user: { select: { name: true, email: true } },
+      shipment: {
+        include: {
+          events: { orderBy: { eventAt: "desc" }, take: 20 },
+        },
+      },
     },
   });
 
@@ -29,6 +35,8 @@ export default async function AdminOrderDetailPage({
     pending_payment: "warning",
     confirmed: "default",
     shipped: "success",
+    delivered: "success",
+    returned: "warning",
     cancelled: "destructive",
   };
 
@@ -93,11 +101,52 @@ export default async function AdminOrderDetailPage({
             </p>
           </div>
 
-          {order.status === "confirmed" && (
+          {order.shipment && (
+            <div className="rounded-lg border border-border bg-white p-6">
+              <h2 className="font-medium">India Post shipment</h2>
+              <p className="mt-2 text-sm">
+                Status:{" "}
+                <span className="font-medium">
+                  {SHIPMENT_STATUS_COPY[order.shipment.status].label}
+                </span>
+              </p>
+              {order.shipment.articleNumber && (
+                <p className="mt-1 text-sm text-muted">
+                  Article / AWB: {order.shipment.articleNumber}
+                </p>
+              )}
+              {order.shipment.exceptionMessage && (
+                <p className="mt-2 text-sm text-destructive">
+                  {order.shipment.exceptionMessage}
+                </p>
+              )}
+              {order.shipment.events.length > 0 && (
+                <ul className="mt-4 space-y-2 border-t border-border pt-4 text-sm">
+                  {order.shipment.events.map((event) => (
+                    <li key={event.id}>
+                      <span className="font-medium">
+                        {event.eventName ?? event.eventCode ?? "Update"}
+                      </span>
+                      {event.office ? (
+                        <span className="text-muted"> · {event.office}</span>
+                      ) : null}
+                      {event.eventAt ? (
+                        <span className="block text-xs text-muted">
+                          {event.eventAt.toLocaleString("en-IN")}
+                        </span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {order.status === "confirmed" && !order.shipment && (
             <ShipOrderForm orderId={order.id} />
           )}
 
-          {order.trackingNumber && (
+          {order.trackingNumber && !order.shipment?.articleNumber && (
             <div className="rounded-lg border border-border bg-white p-6">
               <h2 className="font-medium">Tracking Number</h2>
               <p className="mt-2 text-sm">{order.trackingNumber}</p>

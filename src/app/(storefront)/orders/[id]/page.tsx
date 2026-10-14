@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { ORDER_STATUS_COPY, formatOrderDate } from "@/lib/order-status";
+import { SHIPMENT_STATUS_COPY } from "@/lib/shipment-status";
 
 interface OrderPageProps {
   params: Promise<{ id: string }>;
@@ -22,7 +23,14 @@ export default async function OrderPage({
 
   const order = await prisma.order.findUnique({
     where: { id },
-    include: { items: true },
+    include: {
+      items: true,
+      shipment: {
+        include: {
+          events: { orderBy: { eventAt: "desc" }, take: 15 },
+        },
+      },
+    },
   });
 
   if (!order) notFound();
@@ -146,10 +154,40 @@ export default async function OrderPage({
         </p>
       </div>
 
-      {order.trackingNumber && (
+      {(order.shipment || order.trackingNumber) && (
         <div className="mt-space-lg rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
-          <h2 className="font-headline-sm text-headline-sm text-on-surface">Tracking</h2>
-          <p className="mt-2 font-mono text-sm text-primary">{order.trackingNumber}</p>
+          <h2 className="font-headline-sm text-headline-sm text-on-surface">Shipment tracking</h2>
+          {order.shipment && (
+            <p className="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+              {SHIPMENT_STATUS_COPY[order.shipment.status].label}
+            </p>
+          )}
+          {(order.shipment?.articleNumber ?? order.trackingNumber) && (
+            <p className="mt-2 font-mono text-sm text-primary">
+              {order.shipment?.articleNumber ?? order.trackingNumber}
+            </p>
+          )}
+          {order.shipment?.exceptionMessage && (
+            <p className="mt-2 font-body-sm text-body-sm text-destructive">
+              {order.shipment.exceptionMessage}
+            </p>
+          )}
+          {order.shipment && order.shipment.events.length > 0 && (
+            <ul className="mt-space-md space-y-space-sm border-t border-outline-variant/40 pt-space-md font-body-sm text-body-sm">
+              {order.shipment.events.map((event) => (
+                <li key={event.id} className="flex flex-col gap-0.5">
+                  <span className="font-medium text-on-surface">
+                    {event.eventName ?? event.eventCode ?? "Shipment update"}
+                  </span>
+                  <span className="text-on-surface-variant">
+                    {[event.office, event.eventAt?.toLocaleString("en-IN")]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
