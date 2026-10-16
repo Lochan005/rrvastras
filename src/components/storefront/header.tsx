@@ -8,6 +8,7 @@ import {
   Heart,
   LogOut,
   Menu,
+  Package,
   ShoppingBag,
   User,
   X,
@@ -130,6 +131,13 @@ export function Header() {
                     >
                       My Account
                     </Link>
+                    <Link
+                      href="/account/orders"
+                      className="block px-4 py-2.5 font-body-sm text-body-sm text-on-surface hover:bg-surface-container-low"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      My Orders
+                    </Link>
                     {isAdmin && (
                       <Link
                         href="/admin"
@@ -225,6 +233,14 @@ export function Header() {
                   >
                     <User className="h-5 w-5 text-outline" />
                     Account
+                  </Link>
+                  <Link
+                    href="/account/orders"
+                    className="flex items-center gap-3 px-2 py-2 text-sm text-on-surface"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Package className="h-5 w-5 text-outline" />
+                    My Orders
                   </Link>
                   {isAdmin && (
                     <Link

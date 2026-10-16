@@ -4,13 +4,20 @@ import { requireAuth } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { ORDER_STATUS_COPY, formatOrderDate } from "@/lib/order-status";
+import {
+  formatOrderDate,
+  getCustomerOrderStatus,
+  PURCHASED_ORDER_STATUSES,
+} from "@/lib/order-status";
 
 export default async function OrdersPage() {
   const session = await requireAuth();
 
   const orders = await prisma.order.findMany({
-    where: { userId: session.user.id },
+    where: {
+      userId: session.user.id,
+      status: { in: [...PURCHASED_ORDER_STATUSES] },
+    },
     orderBy: { createdAt: "desc" },
     include: { items: true },
   });
@@ -40,12 +47,14 @@ export default async function OrdersPage() {
         Order History
       </h1>
       <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-        {orders.length} order{orders.length === 1 ? "" : "s"} · Track dispatch and view weave details
+        {orders.length} completed purchase{orders.length === 1 ? "" : "s"} · Open an order to see its items
       </p>
 
       {orders.length === 0 ? (
         <div className="mt-space-2xl rounded-xl bg-surface-container-low px-space-lg py-16 text-center">
-          <p className="font-headline-sm text-headline-sm text-primary">No orders yet.</p>
+          <p className="font-headline-sm text-headline-sm text-primary">
+            No completed purchases yet.
+          </p>
           <Link
             href="/shop"
             className="mt-6 inline-flex rounded bg-primary px-space-xl py-space-md font-label-button text-label-button tracking-wider text-on-primary uppercase"
@@ -56,9 +65,7 @@ export default async function OrdersPage() {
       ) : (
         <div className="mt-space-2xl space-y-space-md">
           {orders.map((order) => {
-            const status = ORDER_STATUS_COPY[order.status] ?? {
-              label: order.status.replace("_", " "),
-            };
+            const status = getCustomerOrderStatus(order.status);
             return (
               <Link
                 key={order.id}
@@ -90,7 +97,7 @@ export default async function OrdersPage() {
                       "rounded-full px-3 py-1 font-label-badge text-label-badge tracking-wider uppercase",
                       status.active
                         ? "bg-primary/10 text-primary"
-                        : status.shipped
+                        : status.complete
                           ? "bg-surface-container-high text-secondary"
                           : "bg-surface-container-high text-on-surface"
                     )}

@@ -14,13 +14,16 @@ import {
   Phone,
   ShieldCheck,
   ShoppingBag,
-  Truck,
 } from "lucide-react";
 import { requireAuth } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { formatINR, cn } from "@/lib/utils";
 import { SignOutButton } from "@/components/account/sign-out-button";
-import { ORDER_STATUS_COPY, formatOrderDate } from "@/lib/order-status";
+import {
+  formatOrderDate,
+  getCustomerOrderStatus,
+  PURCHASED_ORDER_STATUSES,
+} from "@/lib/order-status";
 
 export default async function AccountPage() {
   const session = await requireAuth();
@@ -33,7 +36,7 @@ export default async function AccountPage() {
         include: { addresses: { orderBy: [{ isDefault: "desc" }, { createdAt: "desc" }] } },
       }),
       prisma.order.findMany({
-        where: { userId },
+        where: { userId, status: { in: [...PURCHASED_ORDER_STATUSES] } },
         include: {
           items: {
             include: {
@@ -52,7 +55,9 @@ export default async function AccountPage() {
     orderBy: { createdAt: "desc" },
     take: 5,
       }),
-      prisma.order.count({ where: { userId } }),
+      prisma.order.count({
+        where: { userId, status: { in: [...PURCHASED_ORDER_STATUSES] } },
+      }),
       prisma.wishlistItem.count({ where: { userId } }),
       prisma.address.count({ where: { userId } }),
     ]);
@@ -188,8 +193,8 @@ export default async function AccountPage() {
               </h2>
             </div>
             <p className="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
-              {orderCount} order{orderCount === 1 ? "" : "s"} placed · Track dispatch, view
-              history, and manage your weaves.
+              {orderCount} completed purchase{orderCount === 1 ? "" : "s"} · Open an order
+              to see its items and status.
             </p>
           </div>
           <div className="flex items-center gap-1.5 pt-space-lg font-label-button text-label-button font-semibold text-primary transition-transform group-hover:translate-x-1">
@@ -282,7 +287,7 @@ export default async function AccountPage() {
         {orders.length === 0 ? (
             <div className="rounded-xl bg-surface-container-low px-space-lg py-16 text-center">
               <p className="font-headline-sm text-headline-sm text-primary">
-                You haven&apos;t placed any orders yet.
+                You don&apos;t have any completed purchases yet.
               </p>
               <p className="mt-2 font-body-sm text-body-sm text-on-surface-variant">
                 Start with a silk, cotton, or handloom drape from the collection.
@@ -296,9 +301,7 @@ export default async function AccountPage() {
             </div>
           ) : (
             orders.map((order) => {
-              const status = ORDER_STATUS_COPY[order.status] ?? {
-                label: order.status.replace("_", " "),
-              };
+              const status = getCustomerOrderStatus(order.status);
               return (
                 <div
                   key={order.id}
@@ -338,7 +341,7 @@ export default async function AccountPage() {
                         "flex items-center gap-1.5 rounded-full px-3 py-1 font-label-badge text-label-badge tracking-wider uppercase",
                         status.active
                           ? "bg-primary/10 text-primary"
-                          : status.shipped
+                          : status.complete
                             ? "bg-surface-container-high text-secondary"
                             : "bg-surface-container-high text-on-surface"
                       )}
@@ -349,20 +352,6 @@ export default async function AccountPage() {
                       <span>{status.label}</span>
                     </div>
                   </div>
-
-                  {order.trackingNumber && (
-                    <div className="flex flex-wrap items-center justify-between gap-2 bg-surface-container-high/60 px-space-lg py-space-sm text-on-surface-variant">
-                      <div className="flex items-center gap-2 font-body-sm text-body-sm">
-                        <Truck className="h-[18px] w-[18px] text-secondary" />
-                        <span>
-                          Tracking:{" "}
-                          <strong className="font-mono text-on-surface">
-                            {order.trackingNumber}
-                          </strong>
-                        </span>
-                      </div>
-                    </div>
-                  )}
 
                   <div className="space-y-space-md p-space-lg">
                     {order.items.map((item, index) => {
@@ -434,15 +423,6 @@ export default async function AccountPage() {
                       >
                         View Details
                       </Link>
-                      {(order.status === "confirmed" || order.status === "shipped") && (
-                        <Link
-                          href={`/orders/${order.id}`}
-                          className="inline-flex items-center gap-1.5 rounded bg-primary px-4 py-2 font-label-button text-label-button text-on-primary shadow-sm transition-colors hover:bg-primary-container"
-                        >
-                          <Truck className="h-4 w-4" />
-                          Track Saree
-                        </Link>
-                      )}
                     </div>
                   </div>
                 </div>
