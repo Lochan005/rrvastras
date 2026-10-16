@@ -77,7 +77,7 @@ export default async function HomePage() {
                     Free Shipping
                   </span>
                   <span className="font-body-sm text-body-sm text-on-surface-variant">
-                    On orders above ₹5,000
+                    On every order
                   </span>
                 </div>
               </div>

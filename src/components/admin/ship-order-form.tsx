@@ -44,7 +44,11 @@ export function ShipOrderForm({ orderId }: ShipOrderFormProps) {
       onSubmit={handleSubmit}
       className="rounded-lg border border-border bg-white p-6"
     >
-      <h2 className="font-medium">Mark as Shipped</h2>
+      <h2 className="font-medium">Fulfillment (manual)</h2>
+      <p className="mt-1 text-sm text-muted">
+        After booking the parcel offline, mark this order dispatched. Optional
+        courier / AWB for your records only.
+      </p>
       <div className="mt-4">
         <Label htmlFor="tracking">Tracking Number (optional)</Label>
         <Input

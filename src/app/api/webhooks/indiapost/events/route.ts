@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import {
   parseIndiapostWebhookBody,
   processIndiapostEventsWebhook,
-  verifyIndiapostWebhookSignature,
+  verifyIndiapostWebhookRequest,
 } from "@/lib/indiapost-webhook";
 
 export async function POST(request: Request) {
   const rawBody = await request.text();
 
-  if (!verifyIndiapostWebhookSignature(rawBody, request)) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  if (!verifyIndiapostWebhookRequest(rawBody, request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   let body: unknown;

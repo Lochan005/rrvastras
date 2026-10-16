@@ -430,25 +430,21 @@ export default function CheckoutPage() {
               ))}
             </div>
             
-            <div className="border-t border-border pt-4 space-y-3">
+            <div className="border-t border-border pt-4">
               {shipping && (
                 <>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted">Subtotal</span>
-                    <span className="font-medium text-foreground">{formatINR(shipping.subtotalInPaise)}</span>
+                  <div className="mb-2 flex justify-between text-sm text-muted">
+                    <span>Shipping</span>
+                    <span>{formatINR(shipping.shippingInPaise)}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted">Shipping</span>
-                    <span className="font-medium text-foreground">
-                      {shipping.shippingInPaise === 0
-                        ? "Free"
-                        : formatINR(shipping.shippingInPaise)}
-                    </span>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-border flex justify-between text-lg font-serif font-bold text-foreground">
+                  <div className="flex justify-between text-lg font-serif font-bold text-foreground">
                     <span>Total</span>
                     <span>{formatINR(shipping.totalInPaise)}</span>
                   </div>
+                  <p className="mt-2 text-xs text-muted">
+                    Inclusive of all taxes. Delivery is arranged after payment — no
+                    separate shipping step at checkout.
+                  </p>
                 </>
               )}
             </div>

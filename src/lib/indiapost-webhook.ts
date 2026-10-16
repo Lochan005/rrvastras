@@ -36,15 +36,21 @@ export function buildIndiapostEventsWebhookUrl(): string {
   return `${getSiteUrl()}/api/webhooks/indiapost/events`;
 }
 
-export function verifyIndiapostWebhookSignature(
-  rawBody: string,
-  request: Request
-): boolean {
-  const secret = process.env.INDIAPOST_WEBHOOK_SECRET?.trim();
-  if (!secret) {
-    return process.env.NODE_ENV !== "production";
+function getClientIp(request: Request): string | null {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first) return first;
   }
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  return realIp || null;
+}
 
+function verifyIndiapostWebhookHmac(
+  rawBody: string,
+  request: Request,
+  secret: string
+): boolean {
   let signature: string | null = null;
   for (const header of SIGNATURE_HEADERS) {
     const value = request.headers.get(header);
@@ -66,6 +72,35 @@ export function verifyIndiapostWebhookSignature(
   } catch {
     return false;
   }
+}
+
+/**
+ * India Post often uses IP whitelisting only (no shared webhook secret).
+ * - Optional INDIAPOST_WEBHOOK_SECRET: enable HMAC verification if DoP adds it later.
+ * - Optional INDIAPOST_WEBHOOK_ALLOWED_IPS: comma-separated caller IPs if DoP publishes them.
+ * - Otherwise accept the request (DoP whitelists your host's static IP on their side).
+ */
+export function verifyIndiapostWebhookRequest(
+  rawBody: string,
+  request: Request
+): boolean {
+  const secret = process.env.INDIAPOST_WEBHOOK_SECRET?.trim();
+  if (secret) {
+    return verifyIndiapostWebhookHmac(rawBody, request, secret);
+  }
+
+  const allowedRaw = process.env.INDIAPOST_WEBHOOK_ALLOWED_IPS?.trim();
+  if (allowedRaw) {
+    const allowed = allowedRaw
+      .split(",")
+      .map((ip) => ip.trim())
+      .filter(Boolean);
+    const clientIp = getClientIp(request);
+    if (!clientIp) return false;
+    return allowed.includes(clientIp);
+  }
+
+  return true;
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {

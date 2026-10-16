@@ -44,7 +44,7 @@ export default async function ContactPage() {
         <div className="rounded border border-outline-variant/40 bg-surface-container-lowest p-space-lg shadow-sm">
           <h2 className="font-headline-sm text-headline-sm text-primary">Order support</h2>
           <p className="mt-space-sm font-body-md text-body-md leading-relaxed text-on-surface-variant">
-            For order tracking and delivery updates, sign in to your account to view order history.
+            For order status and delivery questions, sign in to your account or message us on WhatsApp.
           </p>
           <StorefrontLinkButton href="/account" variant="outline" className="mt-space-lg w-full sm:w-auto">
             Go to account
@@ -52,10 +52,10 @@ export default async function ContactPage() {
         </div>
 
         <div className="rounded border border-outline-variant/40 bg-surface-container p-space-lg text-center md:col-span-2">
-          <h2 className="font-headline-sm text-headline-sm text-primary">Shipping information</h2>
+          <h2 className="font-headline-sm text-headline-sm text-primary">Delivery across India</h2>
           <p className="mx-auto mt-space-sm max-w-form font-body-md text-body-md text-on-surface-variant">
-            We ship across India. A flat ₹150 delivery charge applies to standard orders.
-            Enjoy <span className="font-semibold text-on-surface">free shipping</span> on all orders above ₹5,000.
+            We deliver pan-India after your order is confirmed. Delivery is typically within 5–7 days.
+            Shipping is free on every order and is included in your checkout total.
           </p>
         </div>
       </div>

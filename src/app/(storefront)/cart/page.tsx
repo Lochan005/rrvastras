@@ -109,23 +109,17 @@ export default function CartPage() {
             <h2 className="mb-space-md font-headline-md text-headline-md text-primary">
               Order summary
             </h2>
-            <div className="space-y-space-sm font-body-sm text-body-sm text-on-surface-variant">
-              <div className="flex justify-between gap-space-md">
-                <span>Subtotal</span>
-                <span className="font-medium text-on-surface">{formatINR(subtotal)}</span>
-              </div>
-              <div className="flex justify-between gap-space-md">
-                <span>Shipping</span>
-                <span className="text-right">Calculated at checkout</span>
-              </div>
-            </div>
-            <div className="mt-space-md border-t border-outline-variant/40 pt-space-md">
+            <div className="border-t border-outline-variant/40 pt-space-md">
               <div className="flex justify-between font-price-lg text-price-lg text-on-surface">
                 <span>Total</span>
                 <span>{formatINR(subtotal)}</span>
               </div>
+              <div className="mt-space-sm flex justify-between font-body-sm text-body-sm text-on-surface-variant">
+                <span>Shipping</span>
+                <span>₹0</span>
+              </div>
               <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-                Inclusive of all taxes
+                Inclusive of all taxes.
               </p>
             </div>
             <StorefrontLinkButton href="/checkout" className="mt-space-lg w-full">

@@ -10,8 +10,8 @@ const faqs = [
     a: "Yes, absolutely. Every saree curated at RR Vastras comes with an unstitched matching blouse piece (approx. 0.8 to 1 meter in length) attached to the end of the saree drape. You can easily tailor it to your personalized measurements and styling preferences.",
   },
   {
-    q: "What are the shipping charges?",
-    a: "We offer complimentary standard insured shipping across India on all orders above ₹5,000. For orders below this amount, a modest flat shipping rate of ₹150 applies at checkout.",
+    q: "How is delivery charged?",
+    a: "Shipping is free on every order. Delivery is included in your checkout total — there is no separate shipping step. We arrange delivery after payment.",
   },
   {
     q: "What payment methods do you accept?",

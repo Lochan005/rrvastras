@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ShipOrderForm } from "@/components/admin/ship-order-form";
-import { SHIPMENT_STATUS_COPY } from "@/lib/shipment-status";
+import { ORDER_STATUS_COPY } from "@/lib/order-status";
 
 interface AdminOrderPageProps {
   params: Promise<{ id: string }>;
@@ -21,11 +21,6 @@ export default async function AdminOrderDetailPage({
     include: {
       items: true,
       user: { select: { name: true, email: true } },
-      shipment: {
-        include: {
-          events: { orderBy: { eventAt: "desc" }, take: 20 },
-        },
-      },
     },
   });
 
@@ -40,12 +35,15 @@ export default async function AdminOrderDetailPage({
     cancelled: "destructive",
   };
 
+  const statusLabel =
+    ORDER_STATUS_COPY[order.status]?.label ?? order.status.replace(/_/g, " ");
+
   return (
     <div>
       <h1 className="text-2xl font-semibold">Order {order.orderNumber}</h1>
       <div className="mt-2 flex items-center gap-3">
         <Badge variant={statusColors[order.status] ?? "default"}>
-          {order.status.replace("_", " ")}
+          {statusLabel}
         </Badge>
         <span className="text-sm text-muted">
           {order.user.name ?? order.user.email}
@@ -72,7 +70,7 @@ export default async function AdminOrderDetailPage({
               <span>{formatINR(order.subtotalInPaise)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Shipping</span>
+              <span>Delivery charge (internal)</span>
               <span>
                 {order.shippingInPaise === 0
                   ? "Free"
@@ -80,7 +78,7 @@ export default async function AdminOrderDetailPage({
               </span>
             </div>
             <div className="flex justify-between font-semibold">
-              <span>Total</span>
+              <span>Total paid</span>
               <span>{formatINR(order.totalInPaise)}</span>
             </div>
           </div>
@@ -101,55 +99,18 @@ export default async function AdminOrderDetailPage({
             </p>
           </div>
 
-          {order.shipment && (
-            <div className="rounded-lg border border-border bg-white p-6">
-              <h2 className="font-medium">India Post shipment</h2>
-              <p className="mt-2 text-sm">
-                Status:{" "}
-                <span className="font-medium">
-                  {SHIPMENT_STATUS_COPY[order.shipment.status].label}
-                </span>
-              </p>
-              {order.shipment.articleNumber && (
-                <p className="mt-1 text-sm text-muted">
-                  Article / AWB: {order.shipment.articleNumber}
-                </p>
-              )}
-              {order.shipment.exceptionMessage && (
-                <p className="mt-2 text-sm text-destructive">
-                  {order.shipment.exceptionMessage}
-                </p>
-              )}
-              {order.shipment.events.length > 0 && (
-                <ul className="mt-4 space-y-2 border-t border-border pt-4 text-sm">
-                  {order.shipment.events.map((event) => (
-                    <li key={event.id}>
-                      <span className="font-medium">
-                        {event.eventName ?? event.eventCode ?? "Update"}
-                      </span>
-                      {event.office ? (
-                        <span className="text-muted"> · {event.office}</span>
-                      ) : null}
-                      {event.eventAt ? (
-                        <span className="block text-xs text-muted">
-                          {event.eventAt.toLocaleString("en-IN")}
-                        </span>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-
-          {order.status === "confirmed" && !order.shipment && (
+          {order.status === "confirmed" && (
             <ShipOrderForm orderId={order.id} />
           )}
 
-          {order.trackingNumber && !order.shipment?.articleNumber && (
+          {order.status === "shipped" && order.trackingNumber && (
             <div className="rounded-lg border border-border bg-white p-6">
-              <h2 className="font-medium">Tracking Number</h2>
-              <p className="mt-2 text-sm">{order.trackingNumber}</p>
+              <h2 className="font-medium">Courier reference</h2>
+              <p className="mt-2 font-mono text-sm">{order.trackingNumber}</p>
+              <p className="mt-2 text-xs text-muted">
+                Book parcels manually with India Post (or your courier). Customers
+                do not see this on the storefront.
+              </p>
             </div>
           )}
         </div>

@@ -29,13 +29,11 @@ export async function getStoreSettings(): Promise<StoreSettings> {
 }
 
 export function calculateShipping(
-  subtotalInPaise: number,
-  settings: { shippingFlatPaise: number; freeShippingMinPaise: number }
+  _subtotalInPaise: number,
+  _settings: { shippingFlatPaise: number; freeShippingMinPaise: number }
 ): number {
-  if (subtotalInPaise >= settings.freeShippingMinPaise) {
-    return 0;
-  }
-  return settings.shippingFlatPaise;
+  // Shipping is waived for now. Restore the flat-rate check when charges return.
+  return 0;
 }
 
 export function getStockStatus(stock: number): "out_of_stock" | "in_stock" {

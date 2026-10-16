@@ -5,8 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { ORDER_STATUS_COPY, formatOrderDate } from "@/lib/order-status";
-import { SHIPMENT_STATUS_COPY } from "@/lib/shipment-status";
+import { formatOrderDate, getCustomerOrderStatus } from "@/lib/order-status";
 
 interface OrderPageProps {
   params: Promise<{ id: string }>;
@@ -25,11 +24,6 @@ export default async function OrderPage({
     where: { id },
     include: {
       items: true,
-      shipment: {
-        include: {
-          events: { orderBy: { eventAt: "desc" }, take: 15 },
-        },
-      },
     },
   });
 
@@ -41,9 +35,7 @@ export default async function OrderPage({
 
   const isSuccess = payment === "success";
   const isPending = payment === "pending" && order.status === "pending_payment";
-  const status = ORDER_STATUS_COPY[order.status] ?? {
-    label: order.status.replace("_", " "),
-  };
+  const status = getCustomerOrderStatus(order.status);
 
   return (
     <div className="mx-auto w-full max-w-[760px] px-gutter-mobile pt-space-md pb-space-4xl lg:px-gutter-desktop">
@@ -71,7 +63,7 @@ export default async function OrderPage({
         <div className="mb-space-lg rounded-xl bg-primary/10 px-space-lg py-space-md text-center">
           <p className="font-headline-sm text-headline-sm text-primary">Payment successful!</p>
           <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-            Thank you for your order. We&apos;ll ship it soon.
+            Thank you for your order. We&apos;ll prepare it for delivery shortly.
           </p>
         </div>
       )}
@@ -99,7 +91,7 @@ export default async function OrderPage({
             "rounded-full px-3 py-1 font-label-badge text-label-badge tracking-wider uppercase",
             status.active
               ? "bg-primary/10 text-primary"
-              : status.shipped
+              : status.complete
                 ? "bg-surface-container-high text-secondary"
                 : "bg-surface-container-high text-on-surface"
           )}
@@ -122,21 +114,12 @@ export default async function OrderPage({
             </div>
           ))}
         </div>
-        <div className="mt-4 space-y-2 border-t border-outline-variant/40 pt-4 font-body-sm text-body-sm">
-          <div className="flex justify-between">
-            <span className="text-on-surface-variant">Subtotal</span>
-            <span>{formatINR(order.subtotalInPaise)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-on-surface-variant">Shipping</span>
-            <span>
-              {order.shippingInPaise === 0 ? "Free" : formatINR(order.shippingInPaise)}
-            </span>
-          </div>
+        <div className="mt-4 border-t border-outline-variant/40 pt-4 font-body-sm text-body-sm">
           <div className="flex justify-between font-price-md text-price-md font-bold text-on-surface">
-            <span>Total</span>
+            <span>Total paid</span>
             <span>{formatINR(order.totalInPaise)}</span>
           </div>
+          <p className="mt-1 text-on-surface-variant">Inclusive of all taxes</p>
         </div>
       </div>
 
@@ -153,43 +136,6 @@ export default async function OrderPage({
           {order.addressPhone}
         </p>
       </div>
-
-      {(order.shipment || order.trackingNumber) && (
-        <div className="mt-space-lg rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
-          <h2 className="font-headline-sm text-headline-sm text-on-surface">Shipment tracking</h2>
-          {order.shipment && (
-            <p className="mt-2 font-body-sm text-body-sm text-on-surface-variant">
-              {SHIPMENT_STATUS_COPY[order.shipment.status].label}
-            </p>
-          )}
-          {(order.shipment?.articleNumber ?? order.trackingNumber) && (
-            <p className="mt-2 font-mono text-sm text-primary">
-              {order.shipment?.articleNumber ?? order.trackingNumber}
-            </p>
-          )}
-          {order.shipment?.exceptionMessage && (
-            <p className="mt-2 font-body-sm text-body-sm text-destructive">
-              {order.shipment.exceptionMessage}
-            </p>
-          )}
-          {order.shipment && order.shipment.events.length > 0 && (
-            <ul className="mt-space-md space-y-space-sm border-t border-outline-variant/40 pt-space-md font-body-sm text-body-sm">
-              {order.shipment.events.map((event) => (
-                <li key={event.id} className="flex flex-col gap-0.5">
-                  <span className="font-medium text-on-surface">
-                    {event.eventName ?? event.eventCode ?? "Shipment update"}
-                  </span>
-                  <span className="text-on-surface-variant">
-                    {[event.office, event.eventAt?.toLocaleString("en-IN")]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
 
       <div className="mt-space-xl flex flex-wrap gap-space-sm">
         <Link

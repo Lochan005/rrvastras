@@ -111,7 +111,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   size="detail"
                 />
                 <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-                  Inclusive of all taxes · Ships in {PRODUCT_SHIPPING_DURATION}
+                  Inclusive of all taxes · Delivery in {PRODUCT_SHIPPING_DURATION}
                 </p>
               </div>
             </div>
@@ -130,7 +130,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <span>{product.productCode}</span>
                 </li>
                 <li className="flex flex-wrap items-start gap-x-2 gap-y-1">
-                  <span className="min-w-28 shrink-0 font-semibold">Shipping</span>
+                  <span className="min-w-28 shrink-0 font-semibold">Delivery</span>
                   <span>{PRODUCT_SHIPPING_DURATION}</span>
                 </li>
               </ul>
@@ -161,7 +161,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <ul className="space-y-space-sm font-body-sm text-body-sm text-on-surface-variant">
                 <li className="flex gap-space-sm">
                   <span className="text-gold">✦</span>
-                  Free shipping on orders above ₹5,000
+                  Free shipping on every order
                 </li>
                 <li className="flex gap-space-sm">
                   <span className="text-gold">✦</span>

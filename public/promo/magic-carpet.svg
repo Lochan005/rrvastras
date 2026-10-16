@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" fill="none" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="mc-pile" x1="640" y1="90" x2="640" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8d1b3a"/>
+      <stop offset="0.45" stop-color="#5a1024"/>
+      <stop offset="1" stop-color="#2a0612"/>
+    </linearGradient>
+    <linearGradient id="mc-gold" x1="180" y1="80" x2="1100" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff6d4"/>
+      <stop offset="0.28" stop-color="#f0d48a"/>
+      <stop offset="0.55" stop-color="#b8862f"/>
+      <stop offset="0.78" stop-color="#e8c26a"/>
+      <stop offset="1" stop-color="#fff1c2"/>
+    </linearGradient>
+    <radialGradient id="mc-sheen" cx="50%" cy="28%" r="68%">
+      <stop stop-color="#fff8e8" stop-opacity="0.28"/>
+      <stop offset="0.55" stop-color="#fff8e8" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#fff8e8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="mc-weave" width="92" height="92" patternUnits="userSpaceOnUse">
+      <path d="M46 16c7 9 9 16 0 28c-9-12-7-19 0-28z" fill="#f0d48a" opacity="0.34"/>
+      <path d="M46 76c7-9 9-16 0-28c-9 12-7 19 0 28z" fill="#f0d48a" opacity="0.22"/>
+      <path d="M16 46c9-7 16-9 28 0c-12 9-19 7-28 0z" fill="#f6e2a8" opacity="0.18"/>
+      <circle cx="46" cy="46" r="1.7" fill="#fff1c2" opacity="0.55"/>
+    </pattern>
+    <g id="mc-petal">
+      <path d="M0-8c7-12 9-26 0-40c-9 14-7 28 0 40z" fill="url(#mc-gold)"/>
+    </g>
+    <g id="mc-flower">
+      <use href="#mc-petal"/>
+      <use href="#mc-petal" transform="rotate(45)"/>
+      <use href="#mc-petal" transform="rotate(90)"/>
+      <use href="#mc-petal" transform="rotate(135)"/>
+      <use href="#mc-petal" transform="rotate(180)"/>
+      <use href="#mc-petal" transform="rotate(225)"/>
+      <use href="#mc-petal" transform="rotate(270)"/>
+      <use href="#mc-petal" transform="rotate(315)"/>
+      <circle r="11" fill="#4c1020" stroke="#fff1c2" stroke-width="2"/>
+      <circle r="4" fill="#f6e2a8"/>
+    </g>
+    <g id="mc-tassel" stroke-linecap="round">
+      <path d="M-8 0h16" stroke="#a67c2d" stroke-width="3.2"/>
+      <path d="M0 0c7 16 5 34-1 50" stroke="#e8c26a" stroke-width="2.4"/>
+      <path d="M0 0c-1 18-8 36-3 52" stroke="#fff1c4" stroke-width="1.5"/>
+      <circle cx="-1" cy="54" r="3.3" fill="#f0d48a"/>
+    </g>
+  </defs>
+
+  <path d="M168 156C450 112 830 112 1112 156L1130 408C830 462 450 462 150 408Z" fill="#140208"/>
+
+  <path id="mc-body" d="M160 136C448 90 832 90 1120 136L1134 382C832 434 448 434 146 382Z" fill="url(#mc-pile)"/>
+  <use href="#mc-body" fill="url(#mc-weave)"/>
+  <use href="#mc-body" fill="url(#mc-sheen)"/>
+
+  <path d="M160 136C448 90 832 90 1120 136L1134 382C832 434 448 434 146 382Z" stroke="url(#mc-gold)" stroke-width="20"/>
+  <path d="M160 136C448 90 832 90 1120 136L1134 382C832 434 448 434 146 382Z" stroke="#5a1024" stroke-width="9"/>
+  <path d="M178 154C454 116 826 116 1102 154L1112 366C826 410 454 410 168 366Z" stroke="url(#mc-gold)" stroke-width="3"/>
+  <path d="M190 166C458 132 822 132 1090 166L1098 354C822 394 458 394 182 354Z" stroke="#f6e2a8" stroke-width="2.4" stroke-dasharray="1.5 13" stroke-linecap="round" opacity="0.85"/>
+
+  <use href="#mc-flower" transform="translate(640 258) scale(1.35)"/>
+  <circle cx="640" cy="258" r="78" fill="none" stroke="url(#mc-gold)" stroke-width="3" opacity="0.9"/>
+  <circle cx="640" cy="258" r="92" fill="none" stroke="#f6e2a8" stroke-width="1.4" stroke-dasharray="2 8" opacity="0.7"/>
+
+  <use href="#mc-flower" transform="translate(390 258) scale(0.72)"/>
+  <use href="#mc-flower" transform="translate(890 258) scale(0.72)"/>
+
+  <path d="M250 258h70M960 258h70" stroke="url(#mc-gold)" stroke-width="2" opacity="0.8"/>
+  <path d="M268 242c18 16 18 16 36 0M268 274c18-16 18-16 36 0M978 242c18 16 18 16 36 0M978 274c18-16 18-16 36 0" stroke="#f6e2a8" stroke-width="1.6" opacity="0.75"/>
+
+  <path d="M230 168l16 16-16 16-16-16zM250 188l10 10M1034 168l16 16-16 16-16-16zM230 332l16 16-16 16-16-16zM1034 332l16 16-16 16-16-16z" fill="#f0d48a" opacity="0.85"/>
+
+  <g fill="#f0d48a">
+    <use href="#mc-tassel" transform="translate(148 168) rotate(90)"/>
+    <use href="#mc-tassel" transform="translate(142 198) rotate(92)"/>
+    <use href="#mc-tassel" transform="translate(138 230) rotate(94)"/>
+    <use href="#mc-tassel" transform="translate(136 262) rotate(90)"/>
+    <use href="#mc-tassel" transform="translate(138 294) rotate(86)"/>
+    <use href="#mc-tassel" transform="translate(142 326) rotate(88)"/>
+    <use href="#mc-tassel" transform="translate(150 356) rotate(84)"/>
+    <use href="#mc-tassel" transform="translate(1132 168) rotate(-90)"/>
+    <use href="#mc-tassel" transform="translate(1138 198) rotate(-88)"/>
+    <use href="#mc-tassel" transform="translate(1142 230) rotate(-86)"/>
+    <use href="#mc-tassel" transform="translate(1144 262) rotate(-90)"/>
+    <use href="#mc-tassel" transform="translate(1142 294) rotate(-94)"/>
+    <use href="#mc-tassel" transform="translate(1138 326) rotate(-92)"/>
+    <use href="#mc-tassel" transform="translate(1130 356) rotate(-96)"/>
+  </g>
+</svg>

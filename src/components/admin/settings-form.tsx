@@ -53,6 +53,9 @@ export function SettingsForm({ settings }: SettingsFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 max-w-md space-y-4">
+      <p className="text-sm text-muted">
+        Shipping is waived for now. Checkout charges ₹0 regardless of the amounts saved here.
+      </p>
       <div>
         <Label htmlFor="shipping">Flat Shipping Charge (₹)</Label>
         <Input
