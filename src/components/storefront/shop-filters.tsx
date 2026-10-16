@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Diamond, SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { Drawer } from "vaul";
 import { cn } from "@/lib/utils";
 
@@ -186,14 +186,6 @@ export function ShopFilters({
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="flex items-start gap-space-xs rounded bg-surface-container p-space-sm text-on-surface-variant">
-        <Diamond className="mt-0.5 h-[18px] w-[18px] shrink-0 text-tertiary-fixed-dim" />
-        <p className="font-body-sm text-[12px] leading-relaxed">
-          All silk creations are shipped with physical Silk Mark authorization
-          seals and certified artisan weave tags.
-        </p>
       </div>
     </aside>
   );

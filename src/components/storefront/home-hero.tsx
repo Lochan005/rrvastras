@@ -83,16 +83,7 @@ export function HomeHero() {
               <span>Explore Collection</span>
               <ArrowRight className="size-icon-sm shrink-0" aria-hidden />
             </StorefrontLinkButton>
-            <div className="mt-space-md flex flex-wrap items-center gap-space-lg pt-space-xs text-tertiary-fixed lg:mt-space-2xl lg:gap-space-2xl lg:pt-space-md">
-              <div className="flex flex-col">
-                <span className="font-headline-md text-headline-md leading-none font-semibold text-surface-container-lowest">
-                  100%
-                </span>
-                <span className="mt-1 font-label-eyebrow text-label-eyebrow tracking-widest text-surface-variant/70 uppercase">
-                  Authentic Weave
-                </span>
-              </div>
-              <div className="h-7 w-px shrink-0 bg-surface-variant/20" />
+            <div className="mt-space-md flex flex-wrap items-center gap-space-lg pt-space-xs text-tertiary-fixed lg:mt-space-2xl lg:pt-space-md">
               <div className="flex flex-col">
                 <span className="font-headline-md text-headline-md leading-none font-semibold text-surface-container-lowest">
                   Pan-India

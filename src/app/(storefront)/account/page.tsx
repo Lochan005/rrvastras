@@ -12,7 +12,6 @@ import {
   MapPin,
   Package,
   Phone,
-  ShieldCheck,
   ShoppingBag,
 } from "lucide-react";
 import { requireAuth } from "@/lib/session";
@@ -442,19 +441,6 @@ export default async function AccountPage() {
               </h3>
             </div>
             <div className="space-y-space-md">
-              <div className="flex items-start gap-space-sm">
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-primary/10 text-primary">
-                  <ShieldCheck className="h-[18px] w-[18px]" />
-                </div>
-                <div>
-                  <h4 className="font-headline-sm text-[15px] leading-tight text-on-surface">
-                    100% Silk Mark Certified
-                  </h4>
-                  <p className="pt-0.5 font-body-sm text-body-sm text-on-surface-variant">
-                    Silk drapes carry verified artisan weave tags and authenticity seals.
-                  </p>
-                </div>
-              </div>
               <div className="flex items-start gap-space-sm">
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-tertiary-fixed-dim/30 text-tertiary">
                   <Package className="h-[18px] w-[18px]" />

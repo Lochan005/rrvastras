@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import {
-  BadgeCheck,
-  ChevronRight,
-  Handshake,
-  ImageIcon,
-  Package,
-  X,
-} from "lucide-react";
+import { ChevronRight, Handshake, Package, X } from "lucide-react";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { ProductCard } from "@/components/storefront/product-card";
@@ -195,25 +188,17 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               <span className="font-bold text-primary">{breadcrumbLabel}</span>
             </nav>
 
-            <div className="flex flex-col justify-between gap-space-md pt-space-xs md:flex-row md:items-end">
-              <div>
-                <span className="font-label-eyebrow text-label-eyebrow font-bold tracking-[0.25em] text-primary uppercase">
-                  The Heritage Loom Portfolio
-                </span>
-                <h1 className="font-headline-xl text-headline-xl-mobile mt-space-2xs tracking-wide text-primary md:text-headline-xl">
-                  Curated Saree Collections
-                </h1>
-                <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-                  Showing {total} handcrafted saree{total === 1 ? "" : "s"} · Prices
-                  inclusive of all taxes
-                </p>
-              </div>
-              <div className="flex items-center gap-space-xs self-start rounded bg-surface-container-lowest px-space-md py-space-xs font-body-sm text-body-sm text-on-surface-variant shadow-sm md:self-auto">
-                <BadgeCheck className="h-[18px] w-[18px] fill-tertiary-fixed-dim text-tertiary-fixed-dim" />
-                <span className="font-medium">
-                  Silk Mark &amp; Authentic Handloom Certified
-                </span>
-              </div>
+            <div className="pt-space-xs">
+              <span className="font-label-eyebrow text-label-eyebrow font-bold tracking-[0.25em] text-primary uppercase">
+                The Heritage Loom Portfolio
+              </span>
+              <h1 className="font-headline-xl text-headline-xl-mobile mt-space-2xs tracking-wide text-primary md:text-headline-xl">
+                Curated Saree Collections
+              </h1>
+              <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                Showing {total} handcrafted saree{total === 1 ? "" : "s"} · Prices
+                inclusive of all taxes
+              </p>
             </div>
 
             <div className="flex items-center gap-space-sm overflow-x-auto pt-space-sm pb-space-2xs">
@@ -324,7 +309,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
 
         <section className="mt-space-3xl w-full bg-surface-container-lowest py-space-2xl">
-          <div className="mx-auto grid max-w-content grid-cols-1 gap-space-xl px-gutter-mobile md:grid-cols-3 lg:px-gutter-desktop">
+          <div className="mx-auto grid max-w-content grid-cols-1 gap-space-xl px-gutter-mobile md:grid-cols-2 lg:px-gutter-desktop">
             <div className="flex items-start gap-space-md">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-primary-fixed text-primary">
                 <Handshake className="h-[26px] w-[26px]" />
@@ -335,19 +320,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 </h3>
                 <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
                   Sourced ethically across handloom belts with verified fair wages paid to artisan families.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-space-md">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-tertiary-fixed text-tertiary">
-                <ImageIcon className="h-[26px] w-[26px]" />
-              </div>
-              <div className="flex flex-col">
-                <h3 className="font-headline-sm text-headline-sm text-primary">
-                  Silk Mark 100% Purity
-                </h3>
-                <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-                  Every silk drape carries a government-issued Silk Mark QR label certifying pure warp &amp; weft threads.
                 </p>
               </div>
             </div>
