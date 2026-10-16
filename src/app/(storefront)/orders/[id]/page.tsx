@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { CheckCircle2, ChevronRight, Home } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { formatINR } from "@/lib/utils";
@@ -33,8 +33,15 @@ export default async function OrderPage({
     notFound();
   }
 
-  const isSuccess = payment === "success";
-  const isPending = payment === "pending" && order.status === "pending_payment";
+  const isSuccessReturn = payment === "success";
+  const orderConfirmed =
+    order.status === "confirmed" ||
+    order.status === "shipped" ||
+    order.status === "delivered" ||
+    order.status === "returned";
+  const showConfirmation = isSuccessReturn && orderConfirmed;
+  const isPending =
+    payment === "pending" && order.status === "pending_payment";
   const status = getCustomerOrderStatus(order.status);
 
   return (
@@ -59,11 +66,43 @@ export default async function OrderPage({
         <span className="font-semibold text-primary">{order.orderNumber}</span>
       </nav>
 
-      {isSuccess && order.status === "confirmed" && (
-        <div className="mb-space-lg rounded-xl bg-primary/10 px-space-lg py-space-md text-center">
-          <p className="font-headline-sm text-headline-sm text-primary">Payment successful!</p>
+      {showConfirmation && (
+        <section
+          className="mb-space-2xl rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-space-lg py-space-2xl text-center shadow-sm"
+          aria-labelledby="order-confirmed-heading"
+        >
+          <div
+            className="mx-auto flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-success/15"
+            aria-hidden
+          >
+            <CheckCircle2 className="h-11 w-11 text-success" strokeWidth={1.75} />
+          </div>
+          <h1
+            id="order-confirmed-heading"
+            className="mt-space-lg font-headline-lg text-headline-lg text-on-surface"
+          >
+            Your order has been confirmed
+          </h1>
+          <p className="mx-auto mt-space-sm max-w-md font-body-md text-body-md text-on-surface-variant">
+            Thank you for shopping with RR Vastras. We&apos;ve received your payment and
+            will prepare your order for delivery.
+          </p>
+          <p className="mt-space-md font-mono text-sm font-semibold text-primary">
+            {order.orderNumber}
+          </p>
+          <p className="mt-1 font-price-md text-price-md font-bold text-on-surface">
+            {formatINR(order.totalInPaise)}
+          </p>
+        </section>
+      )}
+
+      {isSuccessReturn && !orderConfirmed && order.status === "pending_payment" && (
+        <div className="mb-space-lg rounded-xl bg-surface-container px-space-lg py-space-md text-center">
+          <p className="font-headline-sm text-headline-sm text-on-surface">
+            Confirming your payment
+          </p>
           <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
-            Thank you for your order. We&apos;ll prepare it for delivery shortly.
+            This can take a moment. Refresh the page if this message stays.
           </p>
         </div>
       )}
@@ -79,9 +118,9 @@ export default async function OrderPage({
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="font-headline-lg text-headline-lg text-primary">
-            Order {order.orderNumber}
-          </h1>
+          <h2 className="font-headline-lg text-headline-lg text-primary">
+            {showConfirmation ? "Order details" : `Order ${order.orderNumber}`}
+          </h2>
           <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
             Placed on {formatOrderDate(order.createdAt)}
           </p>
