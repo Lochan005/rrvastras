@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
 import { getDiscountPercent } from "@/lib/pricing";
+import { parseProductListPriority } from "@/lib/product-list-priority";
 import { NextResponse } from "next/server";
 
 async function checkAdmin() {
@@ -31,6 +32,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     stock,
     blouseIncluded,
     isPublished,
+    listPriority,
     images,
   } = body;
 
@@ -62,6 +64,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       stock: stock ?? 1,
       blouseIncluded: blouseIncluded ?? true,
       isPublished: isPublished ?? false,
+      listPriority: parseProductListPriority(listPriority),
       images: {
         create: (images ?? []).map(
           (

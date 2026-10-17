@@ -17,6 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toaster";
+import {
+  PRODUCT_LIST_PRIORITIES,
+  PRODUCT_LIST_PRIORITY_LABELS,
+} from "@/lib/product-list-priority";
+import type { ProductListPriority } from "@prisma/client";
 
 type ProductWithImages = Product & { images: ProductImage[] };
 type ProductMedia = {
@@ -45,6 +50,7 @@ export function ProductForm({ product }: ProductFormProps) {
     stock: product?.stock?.toString() ?? "1",
     blouseIncluded: product?.blouseIncluded ?? true,
     isPublished: product?.isPublished ?? false,
+    listPriority: (product?.listPriority ?? "medium") as ProductListPriority,
   });
   const [images, setImages] = useState<ProductMedia[]>(
     product?.images.map((img, i) => ({
@@ -270,6 +276,30 @@ export function ProductForm({ product }: ProductFormProps) {
         />
         <p className="mt-1 text-xs text-muted">
           Default is 1. Shoppers can buy one of each saree. Remaining quantity is never shown on the store.
+        </p>
+      </div>
+      <div>
+        <Label htmlFor="listPriority">Shop list priority</Label>
+        <select
+          id="listPriority"
+          value={form.listPriority}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              listPriority: e.target.value as ProductListPriority,
+            })
+          }
+          className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {PRODUCT_LIST_PRIORITIES.map((priority) => (
+            <option key={priority} value={priority}>
+              {PRODUCT_LIST_PRIORITY_LABELS[priority]}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-muted">
+          Controls order on the shop page only. High appears first, then medium, then low.
+          Not shown to customers.
         </p>
       </div>
       <div className="flex items-center gap-4">

@@ -10,6 +10,7 @@ import { ShopPagination } from "@/components/storefront/shop-pagination";
 import { ProductGrid } from "@/components/storefront/ui/product-grid";
 import { getSiteUrl, cn } from "@/lib/utils";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
+import { storefrontProductOrderBy } from "@/lib/product-list-priority";
 
 export const metadata: Metadata = {
   title: "Shop Sarees",
@@ -35,7 +36,6 @@ const PRICE_LABELS: Record<string, string> = {
   "under-4000": "Under ₹4,000",
   "under-5000": "Under ₹5,000",
   "5000-10000": "₹5,000 - ₹10,000",
-  "above-10000": "Above ₹10,000",
 };
 
 interface ShopPageProps {
@@ -56,7 +56,6 @@ function priceWhere(price?: string): Prisma.IntFilter | undefined {
   if (price === "under-4000") return { lt: 400000 };
   if (price === "under-5000") return { lt: 500000 };
   if (price === "5000-10000") return { gte: 500000, lte: 1000000 };
-  if (price === "above-10000") return { gt: 1000000 };
   return undefined;
 }
 
@@ -78,11 +77,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     where.priceInPaise = priceFilter;
   }
 
-  let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "desc" };
-  if (params.sort === "price-asc") orderBy = { priceInPaise: "asc" };
-  if (params.sort === "price-desc") orderBy = { priceInPaise: "desc" };
+  const orderBy = storefrontProductOrderBy(params.sort);
 
-  const [total, products, published, inStockCount] = await Promise.all([
+  const [total, products, inStockCount] = await Promise.all([
     prisma.product.count({ where }),
     prisma.product.findMany({
       where,
@@ -91,26 +88,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
-    prisma.product.findMany({
-      where: { isPublished: true },
-      select: { productCode: true, stock: true },
-    }),
     prisma.product.count({
       where: { isPublished: true, stock: { gt: 0 } },
     }),
   ]);
-
-  const productCodeCounts = new Map<string, number>();
-  for (const p of published) {
-    productCodeCounts.set(
-      p.productCode,
-      (productCodeCounts.get(p.productCode) ?? 0) + 1
-    );
-  }
-  const productCodes = [...productCodeCounts.entries()].map(([name, count]) => ({
-    name,
-    count,
-  }));
 
   const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -239,10 +220,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           <div className="flex flex-col items-start gap-space-2xl lg:flex-row">
             <Suspense fallback={<div className="w-full shrink-0 lg:w-[270px]" />}>
               <ShopFilters
-                productCodes={productCodes}
-                totalCount={published.length}
                 inStockCount={inStockCount}
-                currentProductCode={productCodeFilter}
                 currentSort={params.sort}
                 currentPrice={params.price}
                 inStockOnly={params.inStock === "true"}

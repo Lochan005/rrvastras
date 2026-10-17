@@ -50,7 +50,7 @@ export default async function HomePage() {
   const featured = await prisma.product.findMany({
     where: { isPublished: true },
     include: { images: { orderBy: { sortOrder: "asc" } } },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ listPriority: "asc" }, { createdAt: "desc" }],
     take: 4,
   });
   const orgJsonLd = buildOrganizationJsonLd();

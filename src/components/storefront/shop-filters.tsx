@@ -7,10 +7,7 @@ import { Drawer } from "vaul";
 import { cn } from "@/lib/utils";
 
 interface ShopFiltersProps {
-  productCodes: { name: string; count: number }[];
-  totalCount: number;
   inStockCount: number;
-  currentProductCode?: string;
   currentSort?: string;
   currentPrice?: string;
   inStockOnly?: boolean;
@@ -33,10 +30,7 @@ function buildShopUrl(
 }
 
 export function ShopFilters({
-  productCodes,
-  totalCount,
   inStockCount,
-  currentProductCode,
   currentSort,
   currentPrice,
   inStockOnly,
@@ -93,50 +87,6 @@ export function ShopFilters({
         </div>
       </div>
 
-      <div className="flex flex-col gap-space-sm">
-        <div className="flex items-center justify-between">
-          <span className="font-label-eyebrow text-label-eyebrow tracking-wider text-outline uppercase">
-            Product Code
-          </span>
-          <span className="font-label-badge text-label-badge text-on-surface-variant">
-            {productCodes.length} Code{productCodes.length === 1 ? "" : "s"}
-          </span>
-        </div>
-        <div className="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface">
-          <label className="flex cursor-pointer items-center justify-between rounded p-space-xs hover:bg-surface">
-            <span className="flex items-center gap-space-xs">
-              <input
-                type="radio"
-                name="product_code_choice"
-                checked={!currentProductCode}
-                onChange={() => updateFilter("productCode", null)}
-                className="h-4 w-4 cursor-pointer accent-primary"
-              />
-              <span>All codes</span>
-            </span>
-            <span className="text-xs text-outline">{totalCount}</span>
-          </label>
-          {productCodes.map((f) => (
-            <label
-              key={f.name}
-              className="flex cursor-pointer items-center justify-between rounded p-space-xs hover:bg-surface"
-            >
-              <span className="flex items-center gap-space-xs">
-                <input
-                  type="radio"
-                  name="product_code_choice"
-                  checked={currentProductCode === f.name}
-                  onChange={() => updateFilter("productCode", f.name)}
-                  className="h-4 w-4 cursor-pointer accent-primary"
-                />
-                <span>{f.name}</span>
-              </span>
-              <span className="text-xs text-outline">{f.count}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       <div className="flex flex-col gap-space-xs">
         <span className="font-label-eyebrow text-label-eyebrow tracking-wider text-outline uppercase">
           Availability
@@ -167,7 +117,6 @@ export function ShopFilters({
             { value: "under-4000", label: "Under ₹4,000" },
             { value: "under-5000", label: "Under ₹5,000" },
             { value: "5000-10000", label: "₹5,000 - ₹10,000" },
-            { value: "above-10000", label: "Above ₹10,000" },
           ].map((band) => (
             <button
               key={band.value}
