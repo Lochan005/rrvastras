@@ -30,6 +30,9 @@ const CATEGORY_PILLS = [
 ];
 
 const PRICE_LABELS: Record<string, string> = {
+  "under-2000": "Under ₹2,000",
+  "under-3000": "Under ₹3,000",
+  "under-4000": "Under ₹4,000",
   "under-5000": "Under ₹5,000",
   "5000-10000": "₹5,000 - ₹10,000",
   "above-10000": "Above ₹10,000",
@@ -48,6 +51,9 @@ interface ShopPageProps {
 }
 
 function priceWhere(price?: string): Prisma.IntFilter | undefined {
+  if (price === "under-2000") return { lt: 200000 };
+  if (price === "under-3000") return { lt: 300000 };
+  if (price === "under-4000") return { lt: 400000 };
   if (price === "under-5000") return { lt: 500000 };
   if (price === "5000-10000") return { gte: 500000, lte: 1000000 };
   if (price === "above-10000") return { gt: 1000000 };

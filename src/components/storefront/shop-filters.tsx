@@ -162,6 +162,9 @@ export function ShopFilters({
         </span>
         <div className="flex flex-col gap-space-2xs">
           {[
+            { value: "under-2000", label: "Under ₹2,000" },
+            { value: "under-3000", label: "Under ₹3,000" },
+            { value: "under-4000", label: "Under ₹4,000" },
             { value: "under-5000", label: "Under ₹5,000" },
             { value: "5000-10000", label: "₹5,000 - ₹10,000" },
             { value: "above-10000", label: "Above ₹10,000" },
